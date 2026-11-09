@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #4338CA;
+  --color-primary: #4F46E5;
+  --color-primary-hover: #4338CA;
+  --color-primary-light: #EEF2FF;
+  --color-primary-border: #C7D2FE;
+  
+  --color-bg-page: var(--bg);
+  --color-bg-surface: var(--surface);
+  --color-bg-surface-2: var(--surface-2);
+  --color-border-subtle: var(--border);
+  --color-text-main: var(--text);
+  --color-text-muted: var(--text-muted);
+
+  --color-c-foundations: #6366F1;
+  --color-c-relational: #8B5CF6;
+  --color-c-sql: #4F46E5;
+  --color-c-storage: #14B8A6;
+  --color-c-txn: #F59E0B;
+  --color-c-modern: #F43F5E;
+  --color-c-revision: #64748B;
+}
+
+:root {
+  /* Exact Colors extracted from the Reference Screenshots */
+  --bg: #F8FAFC;          /* Clean light grey-white canvas */
+  --surface: #FFFFFF;     /* Pure crisp white card background */
+  --surface-2: #F1F5F9;   /* Soft slate secondary background */
+  --text: #0F172A;        /* Deep slate-black text */
+  --text-muted: #64748B;  /* Slate-500 secondary text */
+  --border: #E2E8F0;      /* Clean subtle border */
+  
+  /* Primary Royal Indigo / Violet Brand Color from Screenshots */
+  --primary: #4F46E5;     /* Main CTA & Logo background (Tailwind Indigo-600) */
+  --primary-hover: #4338CA;
+  --primary-soft: #EEF2FF; /* 10% soft violet/indigo tint */
+  --primary-border: #C7D2FE;
+
+  --accent: #38BDF8;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  /* Chapter & Badge Colors */
+  --c-foundations: #6366F1;
+  --c-relational: #8B5CF6;
+  --c-sql: #4F46E5;
+  --c-storage: #0D9488;
+  --c-txn: #D97706;
+  --c-modern: #E11D48;
+  --c-revision: #475569;
+
+  /* Scrollbar */
+  --scrollbar-thumb: #CBD5E1;
+  --scrollbar-thumb-hover: #94A3B8;
+
+  /* SQL output states */
+  --row-added: #DCFCE7;
+  --row-changed: #FEF3C7;
+  --row-removed: #FEE2E2;
+  --null-pill: #E2E8F0;
+  --match: #10B981;
+
+  /* Code editor */
+  --code-bg: #0F172A;
+  --code-text: #F8FAFC;
+  --code-keyword: #818CF8;
+  --code-string: #34D399;
+  --code-number: #FBBF24;
+  --code-comment: #94A3B8;
+
+  --shadow: 0 1px 3px rgba(15,23,42,.04), 0 10px 28px rgba(15,23,42,.03);
+  --radius: 20px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0B1120;
+  --surface: #111827;
+  --surface-2: #1E293B;
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border: #1E293B;
+
+  --primary: #6366F1;
+  --primary-hover: #4F46E5;
+  --primary-soft: #1E1B4B;
+  --primary-border: #3730A3;
+
+  --row-added: #14532D;
+  --row-changed: #713F12;
+  --row-removed: #7F1D1D;
+  --null-pill: #334155;
+
+  --code-bg: #030712;
+  --code-text: #F3F4F6;
+  --code-keyword: #C4B5FD;
+  --code-string: #6EE7B7;
+  --code-number: #FCD34D;
+  --code-comment: #6B7280;
+
+  --scrollbar-thumb: #334155;
+  --scrollbar-thumb-hover: #475569;
+  --shadow: 0 1px 3px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.35);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+code, pre, .font-mono, .sql-font {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* Custom sleek scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Standardized cards from reference screenshots */
+.custom-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Reference color utility classes */
+.bg-brand-primary {
+  background-color: var(--primary);
+}
+.text-brand-primary {
+  color: var(--primary);
+}
+.border-brand-primary {
+  border-color: var(--primary);
+}
+.bg-brand-soft {
+  background-color: var(--primary-soft);
+}
