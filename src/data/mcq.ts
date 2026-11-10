@@ -55,22 +55,6 @@ export const mcqs: MCQ[] = [
     section: "DDL",
     weeks: [2],
     dataset: "Library",
-    q: "What happens when you run ALTER TABLE Library ADD COLUMN Price NUMERIC(8,2) NOT NULL; (no DEFAULT) on a table that already has rows?",
-    sql: null,
-    options: [
-      "It succeeds and fills Price with 0",
-      "It succeeds and fills Price with NULL",
-      "It fails, because the existing rows would have no value for a NOT NULL column",
-      "It adds the column only for future rows"
-    ],
-    answer: 2,
-    explain: "Give a DEFAULT, or add the column as nullable, fill it with UPDATE, then SET NOT NULL."
-  },
-  {
-    id: 5,
-    section: "DDL",
-    weeks: [2],
-    dataset: "Library",
     q: "Which statement removes both the rows and the structure of the Library table?",
     sql: null,
     options: [
@@ -83,7 +67,7 @@ export const mcqs: MCQ[] = [
     explain: "DELETE and TRUNCATE remove rows but keep the table; DROP TABLE removes the table itself."
   },
   {
-    id: 6,
+    id: 5,
     section: "DDL",
     weeks: [2],
     dataset: "Library",
@@ -99,11 +83,11 @@ export const mcqs: MCQ[] = [
     explain: "TRUNCATE empties the whole table quickly; no WHERE is allowed, and the table remains."
   },
   {
-    id: 7,
+    id: 6,
     section: "DDL",
     weeks: [2],
     dataset: "Library",
-    q: "In PostgreSQL, which statement renames the column Author to AuthorName?",
+    q: "Which statement renames the column Author to AuthorName?",
     sql: null,
     options: [
       "ALTER TABLE Library RENAME COLUMN Author TO AuthorName;",
@@ -115,23 +99,7 @@ export const mcqs: MCQ[] = [
     explain: "RENAME COLUMN … TO … changes only the name; data, type and constraints stay the same."
   },
   {
-    id: 8,
-    section: "DDL",
-    weeks: [2],
-    dataset: "Library",
-    q: "AvailableCopies was changed to VARCHAR(10). To change it back to INT, which clause must be added to ALTER TABLE Library ALTER COLUMN AvailableCopies TYPE INT?",
-    sql: null,
-    options: [
-      "DEFAULT 0",
-      "USING AvailableCopies::INT",
-      "CASCADE",
-      "NOT NULL"
-    ],
-    answer: 1,
-    explain: "Text-to-number is not an automatic conversion, so PostgreSQL needs USING to know how to convert each value."
-  },
-  {
-    id: 9,
+    id: 7,
     section: "DDL",
     weeks: [2],
     dataset: null,
@@ -144,10 +112,10 @@ export const mcqs: MCQ[] = [
       "Sorted in ascending order"
     ],
     answer: 2,
-    explain: "A primary key is UNIQUE + NOT NULL (and PostgreSQL builds an index on it)."
+    explain: "A primary key is UNIQUE + NOT NULL."
   },
   {
-    id: 10,
+    id: 8,
     section: "DDL",
     weeks: [2],
     dataset: null,
@@ -163,7 +131,7 @@ export const mcqs: MCQ[] = [
     explain: "A table has only one primary key, though that key can be composite, e.g. PRIMARY KEY (BookID, Publisher)."
   },
   {
-    id: 11,
+    id: 9,
     section: "DDL",
     weeks: [2],
     dataset: null,
@@ -179,23 +147,7 @@ export const mcqs: MCQ[] = [
     explain: "DEFAULT quietly supplies a value; NOT NULL is what rejects a missing value."
   },
   {
-    id: 12,
-    section: "DDL",
-    weeks: [1, 2],
-    dataset: null,
-    q: "In PostgreSQL, the unquoted table names Library and library are:",
-    sql: null,
-    options: [
-      "Two different tables",
-      "Both folded to upper case",
-      "The same table, because unquoted names are folded to lower case",
-      "Rejected, because mixed case is not allowed"
-    ],
-    answer: 2,
-    explain: "Unquoted identifiers are folded to lower case; only names in double quotes keep their case."
-  },
-  {
-    id: 13,
+    id: 10,
     section: "DDL",
     weeks: [2],
     dataset: null,
@@ -211,40 +163,7 @@ export const mcqs: MCQ[] = [
     explain: "IF NOT EXISTS makes scripts safe to re-run."
   },
   {
-    id: 14,
-    section: "DDL",
-    weeks: [2],
-    dataset: null,
-    q: "When does DROP SCHEMA academics; (without CASCADE) fail?",
-    sql: null,
-    options: [
-      "When the schema is empty",
-      "When the schema still contains tables or other objects",
-      "Whenever you are connected to the database",
-      "Never"
-    ],
-    answer: 1,
-    explain: "A non-empty schema can only be dropped with CASCADE, which also drops everything inside it."
-  },
-  {
-    id: 15,
-    section: "DDL",
-    weeks: [2],
-    dataset: null,
-    q: "Which of these cannot run inside a BEGIN … COMMIT block in PostgreSQL?",
-    sql: null,
-    options: [
-      "ALTER TABLE",
-      "DROP TABLE",
-      "CREATE SCHEMA",
-      "CREATE DATABASE"
-    ],
-    answer: 3,
-    explain: "CREATE DATABASE and DROP DATABASE cannot run inside a transaction. Most other DDL in PostgreSQL is transactional and can be rolled back."
-  },
-
-  {
-    id: 16,
+    id: 11,
     section: "DDL",
     weeks: [2],
     dataset: null,
@@ -254,13 +173,13 @@ export const mcqs: MCQ[] = [
       "UNIQUE",
       "DEFAULT",
       "NOT NULL",
-      "CHECK (col <> '')"
+      "CHECK"
     ],
     answer: 2,
-    explain: "NOT NULL rejects any INSERT or UPDATE that leaves the column without a value. UNIQUE and CHECK both let NULL through."
+    explain: "NOT NULL rejects any INSERT or UPDATE that leaves the column without a value."
   },
   {
-    id: 17,
+    id: 12,
     section: "DDL",
     weeks: [2],
     dataset: null,
@@ -273,10 +192,10 @@ export const mcqs: MCQ[] = [
       "student_id cannot be NULL"
     ],
     answer: 1,
-    explain: "A foreign key enforces referential integrity: each value must match an existing key in the parent table (NULL is allowed unless NOT NULL is also declared)."
+    explain: "A foreign key enforces referential integrity: each value must match an existing key in the parent table."
   },
   {
-    id: 18,
+    id: 13,
     section: "DDL",
     weeks: [2],
     dataset: "Library",
@@ -292,11 +211,11 @@ export const mcqs: MCQ[] = [
     explain: "Structure changes use ALTER TABLE. UPDATE … SET Edition = NULL only empties the values; the column is still there."
   },
   {
-    id: 19,
+    id: 14,
     section: "DDL",
     weeks: [2],
     dataset: null,
-    q: "How does a UNIQUE column differ from a PRIMARY KEY column in PostgreSQL?",
+    q: "How does a UNIQUE column differ from a PRIMARY KEY column?",
     sql: null,
     options: [
       "UNIQUE allows NULL values; PRIMARY KEY does not",
@@ -305,28 +224,28 @@ export const mcqs: MCQ[] = [
       "There is no difference"
     ],
     answer: 0,
-    explain: "PRIMARY KEY = UNIQUE + NOT NULL, and only one per table. A UNIQUE column can hold NULLs, and a table can have many UNIQUE constraints."
+    explain: "PRIMARY KEY = UNIQUE + NOT NULL. A UNIQUE column can hold NULLs, and a table can have many UNIQUE constraints."
   },
   {
-    id: 20,
+    id: 15,
     section: "DDL",
-    weeks: [2,  7],
-    dataset: "txn_lab",
-    q: "What does SET search_path TO txn_lab; do?",
+    weeks: [2],
+    dataset: null,
+    q: "Which SQL command is used to modify an existing table structure?",
     sql: null,
     options: [
-      "Creates a schema called txn_lab",
-      "Drops every schema except txn_lab",
-      "Makes unqualified table names such as account resolve to txn_lab.account",
-      "Copies all tables into txn_lab"
+      "MODIFY TABLE",
+      "UPDATE TABLE",
+      "ALTER TABLE",
+      "CHANGE TABLE"
     ],
     answer: 2,
-    explain: "search_path is the list of schemas PostgreSQL searches for unqualified names. After this, account means txn_lab.account."
+    explain: "ALTER TABLE is the standard DDL command for changing table structure such as adding or dropping columns."
   },
 
   // Section 2: Data Manipulation & Querying (DML & DQL)
   {
-    id: 21,
+    id: 16,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -342,7 +261,7 @@ export const mcqs: MCQ[] = [
     explain: "_ matches exactly one character and % matches any number of characters (including none)."
   },
   {
-    id: 22,
+    id: 17,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -358,39 +277,7 @@ export const mcqs: MCQ[] = [
     explain: "OFFSET skips rows and LIMIT caps the count, which is how 'page two' is fetched."
   },
   {
-    id: 23,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "SELECT * FROM Library LIMIT 3; (no ORDER BY) returns:",
-    sql: "SELECT * FROM Library LIMIT 3;",
-    options: [
-      "The first three rows inserted, guaranteed",
-      "The three rows with the smallest BookID, guaranteed",
-      "Some three rows, with no guarantee which ones",
-      "An error, because LIMIT requires ORDER BY"
-    ],
-    answer: 2,
-    explain: "Without ORDER BY the server may return rows in any order. Use ORDER BY … LIMIT for a reliable Top-N."
-  },
-  {
-    id: 24,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: null,
-    q: "In which order does PostgreSQL execute the clauses of SELECT … FROM … WHERE … ORDER BY … LIMIT …?",
-    sql: null,
-    options: [
-      "SELECT → FROM → WHERE → ORDER BY → LIMIT",
-      "FROM → WHERE → SELECT → ORDER BY → LIMIT",
-      "FROM → SELECT → WHERE → LIMIT → ORDER BY",
-      "WHERE → FROM → SELECT → LIMIT → ORDER BY"
-    ],
-    answer: 1,
-    explain: "You write SELECT first, but the server starts from the table, filters, picks columns, sorts, and finally cuts."
-  },
-  {
-    id: 25,
+    id: 18,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -406,7 +293,7 @@ export const mcqs: MCQ[] = [
     explain: "Without WHERE, every row is changed. Preview with SELECT first, or wrap it in BEGIN … ROLLBACK."
   },
   {
-    id: 26,
+    id: 19,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -419,10 +306,10 @@ export const mcqs: MCQ[] = [
       "INSERT INTO Library VALUES (7, …) VALUES (8, …);"
     ],
     answer: 0,
-    explain: "One VALUES keyword followed by comma-separated row lists. PostgreSQL replies INSERT 0 2."
+    explain: "One VALUES keyword followed by comma-separated row lists."
   },
   {
-    id: 27,
+    id: 20,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -431,14 +318,14 @@ export const mcqs: MCQ[] = [
     options: [
       "A duplicate-key error; the row is rejected",
       "The old row is replaced",
-      "A second row with BookID = 1 is added",
-      "BookID is set to NULL"
+      "A second row with the same ID is added",
+      "The ID is set to NULL"
     ],
     answer: 0,
-    explain: "A primary key must be unique, so a duplicate value is rejected with a unique-violation error (SQLSTATE 23505)."
+    explain: "A primary key must be unique, so a duplicate value is rejected with an error."
   },
   {
-    id: 28,
+    id: 21,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -449,7 +336,7 @@ export const mcqs: MCQ[] = [
     explain: "String literals use single quotes. Double quotes are for identifiers (names of tables and columns)."
   },
   {
-    id: 29,
+    id: 22,
     section: "DML & DQL",
     weeks: [1, 3],
     dataset: null,
@@ -465,7 +352,7 @@ export const mcqs: MCQ[] = [
     explain: "Any comparison with NULL using = is unknown (never true), so SQL uses IS NULL / IS NOT NULL."
   },
   {
-    id: 30,
+    id: 23,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -481,7 +368,7 @@ export const mcqs: MCQ[] = [
     explain: "AS creates a column alias for the output; the table is unchanged."
   },
   {
-    id: 31,
+    id: 24,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -494,11 +381,10 @@ export const mcqs: MCQ[] = [
       "Use TRUNCATE instead"
     ],
     answer: 0,
-    explain: "Preview what would disappear, then swap SELECT * for DELETE (and use a transaction if unsure)."
+    explain: "Preview what would disappear, then swap SELECT * for DELETE."
   },
-
   {
-    id: 32,
+    id: 25,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -513,10 +399,43 @@ export const mcqs: MCQ[] = [
     answer: 2,
     explain: "Each sort key takes its own direction. The second key only breaks ties in the first."
   },
+  {
+    id: 26,
+    section: "DML & DQL",
+    weeks: [1],
+    dataset: null,
+    q: "Which SQL command is used to retrieve data from a table?",
+    sql: null,
+    options: ["FETCH", "GET", "SELECT", "RETRIEVE"],
+    answer: 2,
+    explain: "SELECT is the standard SQL command for querying data from one or more tables."
+  },
+  {
+    id: 27,
+    section: "DML & DQL",
+    weeks: [1],
+    dataset: null,
+    q: "Which SQL command removes specific rows from a table?",
+    sql: null,
+    options: ["DROP", "TRUNCATE", "REMOVE", "DELETE"],
+    answer: 3,
+    explain: "DELETE removes specific rows based on a WHERE condition, or all rows if no condition is given."
+  },
+  {
+    id: 28,
+    section: "DML & DQL",
+    weeks: [1],
+    dataset: null,
+    q: "SELECT, INSERT, UPDATE, and DELETE belong to which category of SQL?",
+    sql: null,
+    options: ["DDL", "DCL", "TCL", "DML"],
+    answer: 3,
+    explain: "These commands manipulate data inside tables, so they are Data Manipulation Language (DML)."
+  },
 
   // Section 3: Aggregation & Relational Joins
   {
-    id: 33,
+    id: 29,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -527,7 +446,7 @@ export const mcqs: MCQ[] = [
     explain: "MIN and MAX work on text and dates (alphabetical order); SUM and AVG need numbers."
   },
   {
-    id: 34,
+    id: 30,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: "uni3",
@@ -543,7 +462,7 @@ export const mcqs: MCQ[] = [
     explain: "Every column in the SELECT list must be either grouped or aggregated."
   },
   {
-    id: 35,
+    id: 31,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -554,7 +473,7 @@ export const mcqs: MCQ[] = [
     explain: "WHERE filters rows before grouping; HAVING filters groups after aggregation."
   },
   {
-    id: 36,
+    id: 32,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -570,7 +489,7 @@ export const mcqs: MCQ[] = [
     explain: "Aggregates are not allowed in WHERE, because WHERE runs before any group exists."
   },
   {
-    id: 37,
+    id: 33,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -586,7 +505,77 @@ export const mcqs: MCQ[] = [
     explain: "Rows are filtered, then grouped, then groups are filtered, then columns are produced and sorted."
   },
   {
+    id: 34,
+    section: "Aggregation & Joins",
+    weeks: [3],
+    dataset: null,
+    q: "Which aggregate function counts only non-NULL values in a column?",
+    sql: null,
+    options: ["COUNT(*)", "COUNT(column_name)", "SUM(column_name)", "AVG(column_name)"],
+    answer: 1,
+    explain: "COUNT(*) counts all rows including those with NULL; COUNT(column_name) counts only rows where that column is not NULL."
+  },
+  {
+    id: 35,
+    section: "Aggregation & Joins",
+    weeks: [3],
+    dataset: null,
+    q: "Which query finds the second highest salary from an Employee table?",
+    sql: "SELECT MAX(salary) FROM Employee\nWHERE salary < (SELECT MAX(salary) FROM Employee);",
+    options: [
+      "It returns NULL always",
+      "It finds the second highest salary",
+      "It finds the lowest salary",
+      "It raises a syntax error"
+    ],
+    answer: 1,
+    explain: "The subquery finds the maximum salary. The outer MAX finds the highest salary below that, which is the second highest."
+  },
+  {
+    id: 36,
+    section: "Aggregation & Joins",
+    weeks: [3],
+    dataset: null,
+    q: "Which query also returns the second highest salary?",
+    sql: "SELECT salary FROM Employee\nORDER BY salary DESC\nLIMIT 1 OFFSET 1;",
+    options: [
+      "It returns the highest salary",
+      "It returns the lowest salary",
+      "It returns the second highest salary",
+      "It returns NULL"
+    ],
+    answer: 2,
+    explain: "ORDER BY DESC puts the highest first; OFFSET 1 skips that top row; LIMIT 1 takes the next one."
+  },
+  {
+    id: 37,
+    section: "Aggregation & Joins",
+    weeks: [3],
+    dataset: null,
+    q: "What does COUNT(*) return when no rows match the WHERE condition?",
+    sql: null,
+    options: ["NULL", "0", "An error", "1"],
+    answer: 1,
+    explain: "COUNT(*) always returns a number. If no rows match, it returns 0, never NULL."
+  },
+  {
     id: 38,
+    section: "Aggregation & Joins",
+    weeks: [3],
+    dataset: null,
+    q: "What does AVG(salary) return if some salary values are NULL?",
+    sql: null,
+    options: [
+      "0",
+      "NULL",
+      "The average of non-NULL salaries only",
+      "An error"
+    ],
+    answer: 2,
+    explain: "Aggregate functions like AVG, SUM, and MIN/MAX ignore NULL values in their calculation."
+  },
+  {
+    id: 39,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -602,7 +591,7 @@ export const mcqs: MCQ[] = [
     explain: "Rows without a match on the other side are dropped."
   },
   {
-    id: 39,
+    id: 40,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: "joins",
@@ -618,7 +607,7 @@ export const mcqs: MCQ[] = [
     explain: "A left join keeps every left-table row and pads the missing right side with NULL."
   },
   {
-    id: 40,
+    id: 41,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: "joins",
@@ -634,7 +623,7 @@ export const mcqs: MCQ[] = [
     explain: "A left join plus an IS NULL check on the right side isolates rows that had nothing to match."
   },
   {
-    id: 41,
+    id: 42,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -650,7 +639,7 @@ export const mcqs: MCQ[] = [
     explain: "That is why a natural join can surprise you if two tables share an unrelated column name."
   },
   {
-    id: 42,
+    id: 43,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: "joins",
@@ -663,10 +652,10 @@ export const mcqs: MCQ[] = [
       "A join between two tables that have the same columns"
     ],
     answer: 2,
-    explain: "For example, Students a JOIN Students b ON a.major = b.major WHERE a.student_id < b.student_id lists pairs of students sharing a major."
+    explain: "For example, joining an Employee table to itself to find pairs who share the same department."
   },
   {
-    id: 43,
+    id: 44,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -679,10 +668,10 @@ export const mcqs: MCQ[] = [
       "The Cartesian product"
     ],
     answer: 0,
-    explain: "It is a left join and a right join combined. MySQL lacks it, so it is simulated with LEFT JOIN … UNION … RIGHT JOIN."
+    explain: "It is a left join and a right join combined — every row from both sides appears."
   },
   {
-    id: 44,
+    id: 45,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -698,7 +687,7 @@ export const mcqs: MCQ[] = [
     explain: "Both need union-compatible SELECTs (same number of columns, compatible types)."
   },
   {
-    id: 45,
+    id: 46,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -713,15 +702,30 @@ export const mcqs: MCQ[] = [
     answer: 3,
     explain: "Missing left-side columns are padded with NULL."
   },
-
+  {
+    id: 47,
+    section: "Aggregation & Joins",
+    weeks: [4],
+    dataset: null,
+    q: "A CROSS JOIN produces:",
+    sql: null,
+    options: [
+      "Only rows where both tables have matching keys",
+      "Every possible combination of rows from both tables",
+      "Only unmatched rows from both tables",
+      "The same result as an INNER JOIN"
+    ],
+    answer: 1,
+    explain: "A CROSS JOIN is a Cartesian product. If Table A has 3 rows and Table B has 4 rows, the result has 12 rows."
+  },
 
   // Section 4: Stored Programs, Views & Triggers (Weeks 5–6)
   {
-    id: 46,
+    id: 48,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
-    q: "How is a stored procedure such as AddStudent run in PostgreSQL?",
+    q: "How is a stored procedure such as AddStudent run?",
     sql: null,
     options: [
       "SELECT AddStudent('Rafi','CSE');",
@@ -733,7 +737,7 @@ export const mcqs: MCQ[] = [
     explain: "Procedures are invoked with CALL. They do not return a value into an expression, so they cannot sit inside a SELECT."
   },
   {
-    id: 47,
+    id: 49,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -746,58 +750,10 @@ export const mcqs: MCQ[] = [
       "Only procedures can take parameters"
     ],
     answer: 0,
-    explain: "Because a function returns exactly one value, it can be used anywhere an expression is allowed. A procedure is a standalone action."
-  },
-  {
-    id: 48,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: "programs",
-    q: "In CREATE PROCEDURE GetStudentCount(INOUT total INT), what does INOUT allow?",
-    sql: null,
-    options: [
-      "total can only be read, never changed",
-      "total is passed in and its new value is handed back to the caller",
-      "total becomes a column in Student",
-      "The procedure runs twice"
-    ],
-    answer: 1,
-    explain: "An INOUT parameter carries a value in and returns the modified value out, which is how a procedure passes a result back."
-  },
-  {
-    id: 49,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: "programs",
-    q: "Inside PL/pgSQL, what does SELECT COUNT(*) INTO total FROM Student; do?",
-    sql: null,
-    options: [
-      "Creates a new table named total",
-      "Inserts the count into a table named total",
-      "Stores the count in the variable total",
-      "Prints the count and discards it"
-    ],
-    answer: 2,
-    explain: "SELECT … INTO variable assigns the query result to a PL/pgSQL variable (it is not CREATE TABLE AS here)."
+    explain: "Because a function returns exactly one value, it can be used anywhere an expression is allowed."
   },
   {
     id: 50,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: null,
-    q: "In CREATE FUNCTION … AS $$ … $$ LANGUAGE plpgsql;, what is the role of $$?",
-    sql: null,
-    options: [
-      "It marks a parameter",
-      "It quotes the function body as a string, so single quotes inside need no escaping",
-      "It means the function returns money",
-      "It ends the transaction"
-    ],
-    answer: 1,
-    explain: "$$ is dollar quoting. The body is passed to PostgreSQL as one string literal, which keeps 'A+' and similar literals simple."
-  },
-  {
-    id: 51,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -813,7 +769,7 @@ export const mcqs: MCQ[] = [
     explain: "A view is a virtual table. Every query on it re-runs the stored SELECT against the live base tables."
   },
   {
-    id: 52,
+    id: 51,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -826,10 +782,10 @@ export const mcqs: MCQ[] = [
       "Never"
     ],
     answer: 0,
-    explain: "A view has no stored data, so it always reflects the current base table. Only materialized views need REFRESH."
+    explain: "A view has no stored data, so it always reflects the current base table."
   },
   {
-    id: 53,
+    id: 52,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -845,7 +801,7 @@ export const mcqs: MCQ[] = [
     explain: "A materialized view stores a snapshot. It stays stale until you refresh it."
   },
   {
-    id: 54,
+    id: 53,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -861,9 +817,9 @@ export const mcqs: MCQ[] = [
     explain: "Materialized views trade freshness for speed, which suits heavy aggregates that can tolerate a scheduled refresh."
   },
   {
-    id: 55,
+    id: 54,
     section: "Programs, Views & Triggers",
-    weeks: [5,  6],
+    weeks: [5, 6],
     dataset: null,
     q: "A PostgreSQL trigger function must be declared with which return type?",
     sql: null,
@@ -874,14 +830,14 @@ export const mcqs: MCQ[] = [
       "RETURNS RECORD"
     ],
     answer: 1,
-    explain: "Trigger functions are declared RETURNS TRIGGER and are then attached with CREATE TRIGGER … EXECUTE FUNCTION."
+    explain: "Trigger functions are declared RETURNS TRIGGER and are then attached with CREATE TRIGGER."
   },
   {
-    id: 56,
+    id: 55,
     section: "Programs, Views & Triggers",
-    weeks: [5,  6],
+    weeks: [5, 6],
     dataset: null,
-    q: "How do you call a trigger in PostgreSQL?",
+    q: "How do you call a trigger?",
     sql: null,
     options: [
       "CALL trigger_name();",
@@ -893,7 +849,7 @@ export const mcqs: MCQ[] = [
     explain: "A trigger is bound to a table event. The event itself fires it; no one calls it explicitly."
   },
   {
-    id: 57,
+    id: 56,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -909,7 +865,7 @@ export const mcqs: MCQ[] = [
     explain: "NEW is the row being inserted. There is no previous row, so OLD is not available."
   },
   {
-    id: 58,
+    id: 57,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -925,23 +881,7 @@ export const mcqs: MCQ[] = [
     explain: "OLD is the row being deleted. Nothing replaces it, so NEW is not available."
   },
   {
-    id: 59,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: null,
-    q: "In a BEFORE INSERT … FOR EACH ROW trigger, what does RETURN NULL; do?",
-    sql: null,
-    options: [
-      "Inserts the row with all columns NULL",
-      "Skips inserting this row, silently",
-      "Rolls back the whole transaction",
-      "Has no effect"
-    ],
-    answer: 1,
-    explain: "In a BEFORE row trigger, returning NULL cancels the operation for that row. RETURN NEW lets it continue."
-  },
-  {
-    id: 60,
+    id: 58,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -957,7 +897,7 @@ export const mcqs: MCQ[] = [
     explain: "AFTER triggers run once the change has happened, so the logged values match what was actually stored."
   },
   {
-    id: 61,
+    id: 59,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -973,7 +913,7 @@ export const mcqs: MCQ[] = [
     explain: "INSTEAD OF triggers let you define what an INSERT, UPDATE or DELETE on a view should do to the underlying tables."
   },
   {
-    id: 62,
+    id: 60,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -988,106 +928,10 @@ export const mcqs: MCQ[] = [
     answer: 1,
     explain: "TG_OP lets one function handle several events, e.g. IF TG_OP = 'DELETE' THEN …"
   },
-  {
-    id: 63,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: "triggers",
-    q: "How do you pause trg_salary_audit temporarily without deleting it?",
-    sql: null,
-    options: [
-      "DROP TRIGGER trg_salary_audit ON employee;",
-      "ALTER TABLE employee DISABLE TRIGGER trg_salary_audit;",
-      "ALTER TRIGGER trg_salary_audit STOP;",
-      "DELETE FROM pg_trigger WHERE tgname = 'trg_salary_audit';"
-    ],
-    answer: 1,
-    explain: "DISABLE TRIGGER pauses it; ENABLE TRIGGER turns it back on. DROP TRIGGER removes it for good."
-  },
-  {
-    id: 64,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: null,
-    q: "What does pg_dump do?",
-    sql: null,
-    options: [
-      "Deletes a database",
-      "Exports (backs up) one database while it stays online",
-      "Restores a .dump file",
-      "Backs up the whole server including roles"
-    ],
-    answer: 1,
-    explain: "pg_dump writes a consistent backup of one database without taking it offline. pg_dumpall covers all databases plus roles."
-  },
-  {
-    id: 65,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: null,
-    q: "What does pg_dump -U postgres -Fc -d mydb -f mydb.dump produce?",
-    sql: null,
-    options: [
-      "A plain, readable SQL script",
-      "A compressed custom-format archive",
-      "A directory of files, one per table",
-      "A CSV export of every table"
-    ],
-    answer: 1,
-    explain: "-Fc selects the custom format, which is compressed and must be restored with pg_restore."
-  },
-  {
-    id: 66,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: null,
-    q: "Which tool restores a custom-format backup such as mydb.dump?",
-    sql: null,
-    options: [
-      "psql -f mydb.dump",
-      "pg_restore -d mydb_new mydb.dump",
-      "pg_dump --restore mydb.dump",
-      "createdb mydb.dump"
-    ],
-    answer: 1,
-    explain: "Custom and directory formats need pg_restore. A plain .sql script is run with psql -f instead."
-  },
-  {
-    id: 67,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: null,
-    q: "Which command backs up all databases together with roles and other global objects?",
-    sql: null,
-    options: [
-      "pg_dump -Fd",
-      "pg_dumpall",
-      "pg_restore --all",
-      "psql --backup"
-    ],
-    answer: 1,
-    explain: "pg_dump works on one database; pg_dumpall includes every database plus the cluster-wide roles."
-  },
-  {
-    id: 68,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: null,
-    q: "A plain-SQL backup mydb.sql is restored into a new database with:",
-    sql: null,
-    options: [
-      "pg_restore -d mydb_new mydb.sql",
-      "createdb mydb_new, then psql -d mydb_new -f mydb.sql",
-      "pg_dump -d mydb_new -f mydb.sql",
-      "ALTER DATABASE mydb_new RESTORE 'mydb.sql';"
-    ],
-    answer: 1,
-    explain: "A plain dump is just SQL, so it is replayed with psql into an existing (newly created) database."
-  },
 
   // Section 5: Database Transactions
   {
-    id: 69,
+    id: 61,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1098,7 +942,7 @@ export const mcqs: MCQ[] = [
     explain: "Atomicity: all statements of a transaction succeed together or none of them take effect."
   },
   {
-    id: 70,
+    id: 62,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1109,7 +953,7 @@ export const mcqs: MCQ[] = [
     explain: "Isolation keeps concurrent transactions from seeing each other's uncommitted work."
   },
   {
-    id: 71,
+    id: 63,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1117,10 +961,10 @@ export const mcqs: MCQ[] = [
     sql: null,
     options: ["Durability", "Isolation", "Atomicity", "Consistency"],
     answer: 0,
-    explain: "Once COMMIT succeeds, the change is permanent (PostgreSQL uses its write-ahead log for this)."
+    explain: "Once COMMIT succeeds, the change is permanent."
   },
   {
-    id: 72,
+    id: 64,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1131,11 +975,11 @@ export const mcqs: MCQ[] = [
     explain: "For example, a CHECK (balance >= 0) constraint can never be left violated after a commit."
   },
   {
-    id: 73,
+    id: 65,
     section: "Transactions",
     weeks: [7],
     dataset: null,
-    q: "Without BEGIN, PostgreSQL runs in autocommit mode. This means:",
+    q: "Without BEGIN, SQL runs in autocommit mode. This means:",
     sql: null,
     options: [
       "Every statement is saved permanently as soon as it finishes",
@@ -1147,7 +991,7 @@ export const mcqs: MCQ[] = [
     explain: "That is why a mistake such as an UPDATE without WHERE cannot be undone in autocommit mode."
   },
   {
-    id: 74,
+    id: 66,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1163,7 +1007,7 @@ export const mcqs: MCQ[] = [
     explain: "The savepoint is kept, so you can roll back to it again."
   },
   {
-    id: 75,
+    id: 67,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1179,43 +1023,11 @@ export const mcqs: MCQ[] = [
     explain: "The transaction is still open and can still be rolled back as a whole."
   },
   {
-    id: 76,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "What happens here?",
-    sql: "BEGIN;\nUPDATE product SET stock = stock + 10 WHERE product_id = 5;\nSAVEPOINT s1;\nUPDATE product SET stock = stock + 10 WHERE product_id = 5;\nRELEASE SAVEPOINT s1;\nROLLBACK TO SAVEPOINT s1;",
-    options: [
-      "The second update is undone",
-      "Error: savepoint \"s1\" does not exist (SQLSTATE 3B001)",
-      "Both updates are undone",
-      "The transaction is committed"
-    ],
-    answer: 1,
-    explain: "After RELEASE, the bookmark is gone, so you cannot roll back to it."
-  },
-  {
-    id: 77,
+    id: 68,
     section: "Transactions",
     weeks: [7],
     dataset: null,
-    q: "Inside a transaction, a statement fails with an error. What happens to the next statement you run before ending the transaction?",
-    sql: null,
-    options: [
-      "It runs normally",
-      "It is committed automatically",
-      "It is refused: 'current transaction is aborted' (SQLSTATE 25P02)",
-      "The database restarts"
-    ],
-    answer: 2,
-    explain: "Every further statement is refused until you end the transaction with ROLLBACK (or COMMIT, which then acts as a rollback)."
-  },
-  {
-    id: 78,
-    section: "Transactions",
-    weeks: [7],
-    dataset: null,
-    q: "Which statement starts an explicit transaction block in PostgreSQL?",
+    q: "Which statement starts an explicit transaction block?",
     sql: null,
     options: [
       "COMMIT",
@@ -1227,7 +1039,7 @@ export const mcqs: MCQ[] = [
     explain: "BEGIN (or START TRANSACTION) opens the block. Everything until COMMIT or ROLLBACK is one unit."
   },
   {
-    id: 79,
+    id: 69,
     section: "Transactions",
     weeks: [7],
     dataset: "txn_lab",
@@ -1240,6 +1052,70 @@ export const mcqs: MCQ[] = [
       "Nothing works; the whole transaction is lost"
     ],
     answer: 1,
-    explain: "ROLLBACK TO SAVEPOINT clears the aborted state and undoes only what came after s1. COMMIT at that point would roll everything back."
+    explain: "ROLLBACK TO SAVEPOINT clears the aborted state and undoes only what came after s1."
+  },
+  {
+    id: 70,
+    section: "Transactions",
+    weeks: [7],
+    dataset: null,
+    q: "What is the effect of COMMIT in a transaction?",
+    sql: null,
+    options: [
+      "It undoes all changes made in the transaction",
+      "It saves all changes made in the transaction permanently",
+      "It pauses the transaction",
+      "It has no effect until ROLLBACK is called"
+    ],
+    answer: 1,
+    explain: "COMMIT makes all changes in the transaction permanent and visible to other sessions."
+  },
+  {
+    id: 71,
+    section: "Transactions",
+    weeks: [7],
+    dataset: null,
+    q: "What is the effect of ROLLBACK in a transaction?",
+    sql: null,
+    options: [
+      "It saves all changes made so far",
+      "It undoes all changes made in the current transaction",
+      "It creates a savepoint",
+      "It ends only the last statement"
+    ],
+    answer: 1,
+    explain: "ROLLBACK discards every change made since BEGIN, leaving the database as it was before the transaction started."
+  },
+  {
+    id: 72,
+    section: "Transactions",
+    weeks: [7],
+    dataset: null,
+    q: "What is a SAVEPOINT used for?",
+    sql: null,
+    options: [
+      "To commit part of a transaction",
+      "To mark a point inside a transaction so you can roll back to it without losing earlier work",
+      "To start a new transaction inside an existing one",
+      "To back up the entire database"
+    ],
+    answer: 1,
+    explain: "SAVEPOINTs let you undo a portion of a transaction while keeping earlier changes in the same transaction."
+  },
+  {
+    id: 73,
+    section: "Transactions",
+    weeks: [7],
+    dataset: null,
+    q: "A bank transfer deducts $100 from Account A and adds $100 to Account B. If the deduction succeeds but the addition fails, what should happen?",
+    sql: null,
+    options: [
+      "Keep the deduction only",
+      "Keep the addition only",
+      "Roll back the entire transaction so neither change takes effect",
+      "Commit the deduction and try the addition again later"
+    ],
+    answer: 2,
+    explain: "Atomicity requires that both operations succeed or both are rolled back, preventing money from disappearing."
   }
 ];
