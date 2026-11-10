@@ -149,7 +149,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <div className="text-xs font-semibold tracking-wide text-text-muted flex flex-wrap items-center gap-2">
                   <span className="text-primary font-bold">{course.code}</span>
                   <span>·</span>
-                  <span>DBMS Sessional</span>
+                  <span>Lab Course</span>
                   <span>·</span>
                   <span>Level-2, Term-II</span>
                   <span>·</span>
@@ -157,18 +157,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </div>
 
                 <h1 className="text-3xl sm:text-5xl font-black text-text tracking-tight leading-[1.12]">
-                  What is a <br className="hidden sm:block" />
-                  <span className="text-primary">Database Management System?</span>
+                  Database Management System <span className="text-primary">Sessional</span>
                 </h1>
 
                 <p className="text-base sm:text-lg text-text-muted max-w-xl leading-relaxed">
-                  A <strong className="text-text">DBMS</strong> is software that stores, organises and protects data so that many
-                  users and programs can share it safely. You describe <em>what</em> data you want using SQL, and the DBMS
-                  works out <em>how</em> to store, find and update it.
+                  The hands-on lab side of DBMS. Every week you write real SQL in{' '}
+                  <strong className="text-text">PostgreSQL</strong>: create tables, insert and query data, join and
+                  group results, build functions, views and triggers, and control transactions.
                 </p>
                 <p className="text-sm text-text-muted max-w-xl leading-relaxed">
-                  Examples include PostgreSQL, MySQL, Oracle and SQL Server. In this sessional we use{' '}
-                  <strong className="text-text">PostgreSQL</strong>.
+                  <strong className="text-text">What is a DBMS?</strong> Software that stores, organises and protects data
+                  so many users and programs can share it safely. You say <em>what</em> data you want in SQL, and the DBMS
+                  works out <em>how</em> to store, find and update it.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -176,7 +176,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     onClick={() => onNavigate('weeks')}
                     className="px-6 py-3.5 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition shadow-sm cursor-pointer flex items-center gap-2"
                   >
-                    Start with the Roadmap <ArrowRight className="w-4 h-4" />
+                    Start the Weekly Labs <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => onNavigate('playground')}
@@ -228,8 +228,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* Key ideas */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-text">DBMS in six ideas</h2>
-        <p className="text-sm text-text-muted mt-1 mb-5">The core vocabulary you will use in every lab.</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-text">Six DBMS ideas behind every lab</h2>
+        <p className="text-sm text-text-muted mt-1 mb-5">The core concepts you will put into practice with SQL.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {KEY_IDEAS.map(({ icon: Icon, title, text, accent }) => (
             <div key={title} className="custom-card p-5">
@@ -246,7 +246,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* SQL command families */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <h2 className="text-xl sm:text-2xl font-bold text-text">The SQL command families</h2>
-        <p className="text-sm text-text-muted mt-1 mb-5">Every statement you write in this course belongs to one of these groups.</p>
+        <p className="text-sm text-text-muted mt-1 mb-5">Every statement you write in the lab belongs to one of these groups.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {SQL_FAMILIES.map(f => (
             <div key={f.tag} className="custom-card p-5">

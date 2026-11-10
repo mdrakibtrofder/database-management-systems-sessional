@@ -1,6 +1,6 @@
 {
   "name": "CSE 2206 · DBMS Sessional Study Website",
-  "description": "Comprehensive, interactive SQL study portal for CSE 2206 Database Management Systems Sessional at BAUST with in-browser PostgreSQL, 70-question MCQ bank, visualizers, and weekly course content.",
+  "description": "Comprehensive, interactive SQL study portal for CSE 2206 Database Management Systems Sessional at BAUST with in-browser PostgreSQL, MCQ practice bank, visualizers, and weekly lab content.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
