@@ -11,7 +11,7 @@ export interface MCQ {
 }
 
 export const mcqs: MCQ[] = [
-  // Section 1: Data Definition Language (DDL) · Q1–Q20
+  // Section 1: Data Definition Language (DDL)
   {
     id: 1,
     section: "DDL",
@@ -44,7 +44,7 @@ export const mcqs: MCQ[] = [
     section: "DDL",
     weeks: [2],
     dataset: "Library",
-    q: "After ALTER TABLE Library ADD COLUMN Edition INT; on the 5-row table, what does Edition hold in the existing rows?",
+    q: "After ALTER TABLE Library ADD COLUMN Edition INT; (no DEFAULT), what does Edition hold in the rows that already exist?",
     sql: null,
     options: ["NULL", "0", "An empty string", "The statement fails"],
     answer: 0,
@@ -324,42 +324,9 @@ export const mcqs: MCQ[] = [
     explain: "search_path is the list of schemas PostgreSQL searches for unqualified names. After this, account means txn_lab.account."
   },
 
-  // Section 2: Data Manipulation & Querying (DML & DQL) · Q21–Q45
+  // Section 2: Data Manipulation & Querying (DML & DQL)
   {
     id: 21,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does SELECT DISTINCT Author FROM Library; return?",
-    sql: "SELECT DISTINCT Author FROM Library;",
-    options: ["5", "4", "3", "2"],
-    answer: 1,
-    explain: "Silberschatz appears twice but is listed once."
-  },
-  {
-    id: 22,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does SELECT * FROM Library WHERE AvailableCopies > 4; return?",
-    sql: "SELECT * FROM Library WHERE AvailableCopies > 4;",
-    options: ["4", "2", "5", "3"],
-    answer: 3,
-    explain: "Clean Code (7), Database System Concepts (6) and Computer Networks (5)."
-  },
-  {
-    id: 23,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does SELECT BookTitle FROM Library WHERE BookTitle LIKE 'C%'; return?",
-    sql: "SELECT BookTitle FROM Library WHERE BookTitle LIKE 'C%';",
-    options: ["2", "1", "3", "0"],
-    answer: 0,
-    explain: "'C%' means 'starts with C': Computer Networks and Clean Code."
-  },
-  {
-    id: 24,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -375,56 +342,7 @@ export const mcqs: MCQ[] = [
     explain: "_ matches exactly one character and % matches any number of characters (including none)."
   },
   {
-    id: 25,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does SELECT * FROM Library WHERE AvailableCopies BETWEEN 4 AND 6; return?",
-    sql: "SELECT * FROM Library WHERE AvailableCopies BETWEEN 4 AND 6;",
-    options: ["1", "2", "3", "4"],
-    answer: 2,
-    explain: "BETWEEN includes both ends: 6, 5 and 4 copies."
-  },
-  {
-    id: 26,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does this return?",
-    sql: "SELECT * FROM Library\nWHERE Author = 'Silberschatz' AND AvailableCopies > 5;",
-    options: ["0", "1", "2", "3"],
-    answer: 1,
-    explain: "Both conditions must be true: only Database System Concepts (6 copies)."
-  },
-  {
-    id: 27,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does this return?",
-    sql: "SELECT * FROM Library\nWHERE Category = 'Database' OR Publisher = 'Pearson';",
-    options: ["1", "3", "2", "4"],
-    answer: 2,
-    explain: "Either condition is enough: Database System Concepts (Database) and Computer Networks (Pearson)."
-  },
-  {
-    id: 28,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "Which book does SELECT BookTitle FROM Library ORDER BY AvailableCopies DESC LIMIT 1; return?",
-    sql: "SELECT BookTitle FROM Library ORDER BY AvailableCopies DESC LIMIT 1;",
-    options: [
-      "Introduction to Algorithms",
-      "Clean Code",
-      "Database System Concepts",
-      "Computer Networks"
-    ],
-    answer: 1,
-    explain: "Sorted from most to fewest copies, Clean Code (7) comes first."
-  },
-  {
-    id: 29,
+    id: 22,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -440,7 +358,7 @@ export const mcqs: MCQ[] = [
     explain: "OFFSET skips rows and LIMIT caps the count, which is how 'page two' is fetched."
   },
   {
-    id: 30,
+    id: 23,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -456,7 +374,7 @@ export const mcqs: MCQ[] = [
     explain: "Without ORDER BY the server may return rows in any order. Use ORDER BY … LIMIT for a reliable Top-N."
   },
   {
-    id: 31,
+    id: 24,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -472,18 +390,7 @@ export const mcqs: MCQ[] = [
     explain: "You write SELECT first, but the server starts from the table, filters, picks columns, sorts, and finally cuts."
   },
   {
-    id: 32,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "What reply does PostgreSQL give for this statement?",
-    sql: "UPDATE Library SET AvailableCopies = AvailableCopies - 1\nWHERE Author = 'Silberschatz';",
-    options: ["UPDATE 1", "UPDATE 5", "UPDATE 0", "UPDATE 2"],
-    answer: 3,
-    explain: "Two books are by Silberschatz, so two rows change."
-  },
-  {
-    id: 33,
+    id: 25,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -492,30 +399,14 @@ export const mcqs: MCQ[] = [
     options: [
       "Raises an error because WHERE is missing",
       "Updates only the first row",
-      "Updates all 5 rows",
+      "Updates every row in the table",
       "Asks for confirmation first"
     ],
     answer: 2,
     explain: "Without WHERE, every row is changed. Preview with SELECT first, or wrap it in BEGIN … ROLLBACK."
   },
   {
-    id: 34,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "Which row does DELETE FROM Library WHERE AvailableCopies < 4; remove?",
-    sql: "DELETE FROM Library WHERE AvailableCopies < 4;",
-    options: [
-      "Introduction to Algorithms",
-      "Operating System Concepts",
-      "Both Introduction to Algorithms and Operating System Concepts",
-      "No rows"
-    ],
-    answer: 0,
-    explain: "Only Introduction to Algorithms has fewer than 4 copies (3). Operating System Concepts has exactly 4. The reply is DELETE 1."
-  },
-  {
-    id: 35,
+    id: 26,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -531,11 +422,11 @@ export const mcqs: MCQ[] = [
     explain: "One VALUES keyword followed by comma-separated row lists. PostgreSQL replies INSERT 0 2."
   },
   {
-    id: 36,
+    id: 27,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
-    q: "What happens when you insert a new row with BookID = 1 into Library?",
+    q: "What happens when you insert a row whose PRIMARY KEY value already exists in the table?",
     sql: null,
     options: [
       "A duplicate-key error; the row is rejected",
@@ -544,10 +435,10 @@ export const mcqs: MCQ[] = [
       "BookID is set to NULL"
     ],
     answer: 0,
-    explain: "BookID is the primary key, so a duplicate value violates its uniqueness (SQLSTATE 23505)."
+    explain: "A primary key must be unique, so a duplicate value is rejected with a unique-violation error (SQLSTATE 23505)."
   },
   {
-    id: 37,
+    id: 28,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -558,7 +449,7 @@ export const mcqs: MCQ[] = [
     explain: "String literals use single quotes. Double quotes are for identifiers (names of tables and columns)."
   },
   {
-    id: 38,
+    id: 29,
     section: "DML & DQL",
     weeks: [1, 3],
     dataset: null,
@@ -574,7 +465,7 @@ export const mcqs: MCQ[] = [
     explain: "Any comparison with NULL using = is unknown (never true), so SQL uses IS NULL / IS NOT NULL."
   },
   {
-    id: 39,
+    id: 30,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -590,7 +481,7 @@ export const mcqs: MCQ[] = [
     explain: "AS creates a column alias for the output; the table is unchanged."
   },
   {
-    id: 40,
+    id: 31,
     section: "DML & DQL",
     weeks: [1],
     dataset: null,
@@ -607,55 +498,7 @@ export const mcqs: MCQ[] = [
   },
 
   {
-    id: 41,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does this return?",
-    sql: "SELECT * FROM Library\nWHERE Author = 'Silberschatz' AND AvailableCopies > 5;",
-    options: [
-      "0",
-      "1",
-      "2",
-      "5"
-    ],
-    answer: 1,
-    explain: "Silberschatz wrote two books (6 and 4 copies). Only Database System Concepts has more than 5 copies."
-  },
-  {
-    id: 42,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does this return?",
-    sql: "SELECT BookTitle FROM Library\nWHERE Category IN ('Database', 'Networking');",
-    options: [
-      "1",
-      "2",
-      "3",
-      "0"
-    ],
-    answer: 1,
-    explain: "IN is a shorthand for Category = 'Database' OR Category = 'Networking': Database System Concepts and Computer Networks."
-  },
-  {
-    id: 43,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "How many rows does this return?",
-    sql: "SELECT BookTitle FROM Library\nWHERE BookTitle ILIKE '%concepts%';",
-    options: [
-      "0, because the search text is lowercase",
-      "1",
-      "2",
-      "5"
-    ],
-    answer: 2,
-    explain: "ILIKE is PostgreSQL's case-insensitive LIKE, so it matches Database System Concepts and Operating System Concepts."
-  },
-  {
-    id: 44,
+    id: 32,
     section: "DML & DQL",
     weeks: [1],
     dataset: "Library",
@@ -670,64 +513,10 @@ export const mcqs: MCQ[] = [
     answer: 2,
     explain: "Each sort key takes its own direction. The second key only breaks ties in the first."
   },
-  {
-    id: 45,
-    section: "DML & DQL",
-    weeks: [1],
-    dataset: "Library",
-    q: "What does PostgreSQL reply after this statement?",
-    sql: "UPDATE Library\nSET AvailableCopies = AvailableCopies + 1\nWHERE Publisher = 'Pearson';",
-    options: [
-      "UPDATE 0",
-      "UPDATE 1",
-      "UPDATE 5",
-      "INSERT 0 1"
-    ],
-    answer: 1,
-    explain: "The reply reports how many rows matched the WHERE clause. Only Computer Networks is published by Pearson."
-  },
 
-  // Section 3: Aggregation & Relational Joins · Q46–Q72
+  // Section 3: Aggregation & Relational Joins
   {
-    id: 46,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "What does SELECT COUNT(Marks) FROM ENROLLMENT; return?",
-    sql: "SELECT COUNT(Marks) FROM ENROLLMENT;",
-    options: ["8", "6", "7", "5"],
-    answer: 2,
-    explain: "COUNT(column) counts non-NULL values only; COUNT(*) would return 8."
-  },
-  {
-    id: 47,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "AVG(Marks) returns 76.57, but AVG(COALESCE(Marks, 0)) returns 67.00. Why?",
-    sql: null,
-    options: [
-      "AVG always rounds up",
-      "AVG ignores NULL, so it divides 536 by 7, while COALESCE turns the NULL into 0 and divides by 8",
-      "NULL is treated as 100 by AVG",
-      "COALESCE causes a rounding error"
-    ],
-    answer: 1,
-    explain: "Aggregates skip NULL. Replace it with COALESCE only if 'missing' should really count as zero."
-  },
-  {
-    id: 48,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "What does SELECT COUNT(DISTINCT StuID) FROM ENROLLMENT; return?",
-    sql: "SELECT COUNT(DISTINCT StuID) FROM ENROLLMENT;",
-    options: ["6", "8", "4", "5"],
-    answer: 3,
-    explain: "S101–S105 are enrolled; S106 has no enrolment rows."
-  },
-  {
-    id: 49,
+    id: 33,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -738,7 +527,7 @@ export const mcqs: MCQ[] = [
     explain: "MIN and MAX work on text and dates (alphabetical order); SUM and AVG need numbers."
   },
   {
-    id: 50,
+    id: 34,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: "uni3",
@@ -754,7 +543,7 @@ export const mcqs: MCQ[] = [
     explain: "Every column in the SELECT list must be either grouped or aggregated."
   },
   {
-    id: 51,
+    id: 35,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -765,7 +554,7 @@ export const mcqs: MCQ[] = [
     explain: "WHERE filters rows before grouping; HAVING filters groups after aggregation."
   },
   {
-    id: 52,
+    id: 36,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -781,18 +570,7 @@ export const mcqs: MCQ[] = [
     explain: "Aggregates are not allowed in WHERE, because WHERE runs before any group exists."
   },
   {
-    id: 53,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "How many rows does this return?",
-    sql: "SELECT CourseID, ROUND(AVG(Marks), 2) AS AvgMarks\nFROM ENROLLMENT\nWHERE Marks IS NOT NULL\nGROUP BY CourseID\nHAVING AVG(Marks) > 75;",
-    options: ["1", "2", "3", "4"],
-    answer: 1,
-    explain: "Course averages are CSE-4105 88, CSE-3101 76, CSE-3103 75 and EEE-2101 72.5. Only 88 and 76 are greater than 75."
-  },
-  {
-    id: 54,
+    id: 37,
     section: "Aggregation & Joins",
     weeks: [3],
     dataset: null,
@@ -808,18 +586,7 @@ export const mcqs: MCQ[] = [
     explain: "Rows are filtered, then grouped, then groups are filtered, then columns are produced and sorted."
   },
   {
-    id: 55,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "What does SELECT SUM(Marks) FROM ENROLLMENT; return?",
-    sql: "SELECT SUM(Marks) FROM ENROLLMENT;",
-    options: ["NULL, because one mark is NULL", "613", "0", "536"],
-    answer: 3,
-    explain: "SUM ignores the NULL row: 82 + 75 + 91 + 88 + 68 + 55 + 77 = 536."
-  },
-  {
-    id: 56,
+    id: 38,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -835,15 +602,15 @@ export const mcqs: MCQ[] = [
     explain: "Rows without a match on the other side are dropped."
   },
   {
-    id: 57,
+    id: 39,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: "joins",
-    q: "In Students s LEFT JOIN Enrollments e ON s.student_id = e.student_id, how does Nabila (no enrolments) appear?",
+    q: "In Students s LEFT JOIN Enrollments e ON s.student_id = e.student_id, how does a student with no enrolments appear?",
     sql: null,
     options: [
-      "She does not appear",
-      "She appears twice",
+      "The student does not appear",
+      "The student appears twice",
       "Once, with NULL in all the Enrollments columns",
       "The query fails"
     ],
@@ -851,18 +618,7 @@ export const mcqs: MCQ[] = [
     explain: "A left join keeps every left-table row and pads the missing right side with NULL."
   },
   {
-    id: 58,
-    section: "Aggregation & Joins",
-    weeks: [4],
-    dataset: "joins",
-    q: "How many rows does SELECT s.name, c.course_name FROM Students s CROSS JOIN Courses c; return?",
-    sql: "SELECT s.name, c.course_name FROM Students s CROSS JOIN Courses c;",
-    options: ["11", "30", "6", "5"],
-    answer: 1,
-    explain: "A cross join pairs every student with every course: 6 × 5 = 30."
-  },
-  {
-    id: 59,
+    id: 40,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: "joins",
@@ -875,10 +631,10 @@ export const mcqs: MCQ[] = [
       "… FROM Students s RIGHT JOIN Enrollments e ON s.student_id = e.student_id WHERE s.student_id IS NOT NULL;"
     ],
     answer: 0,
-    explain: "A left join plus an IS NULL check on the right side isolates rows that had nothing to match (here: Nabila)."
+    explain: "A left join plus an IS NULL check on the right side isolates rows that had nothing to match."
   },
   {
-    id: 60,
+    id: 41,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -894,7 +650,7 @@ export const mcqs: MCQ[] = [
     explain: "That is why a natural join can surprise you if two tables share an unrelated column name."
   },
   {
-    id: 61,
+    id: 42,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: "joins",
@@ -910,7 +666,7 @@ export const mcqs: MCQ[] = [
     explain: "For example, Students a JOIN Students b ON a.major = b.major WHERE a.student_id < b.student_id lists pairs of students sharing a major."
   },
   {
-    id: 62,
+    id: 43,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -926,7 +682,7 @@ export const mcqs: MCQ[] = [
     explain: "It is a left join and a right join combined. MySQL lacks it, so it is simulated with LEFT JOIN … UNION … RIGHT JOIN."
   },
   {
-    id: 63,
+    id: 44,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -942,7 +698,7 @@ export const mcqs: MCQ[] = [
     explain: "Both need union-compatible SELECTs (same number of columns, compatible types)."
   },
   {
-    id: 64,
+    id: 45,
     section: "Aggregation & Joins",
     weeks: [4],
     dataset: null,
@@ -957,134 +713,11 @@ export const mcqs: MCQ[] = [
     answer: 3,
     explain: "Missing left-side columns are padded with NULL."
   },
-  {
-    id: 65,
-    section: "Aggregation & Joins",
-    weeks: [4],
-    dataset: "joins",
-    q: "How many rows does this return?",
-    sql: "SELECT s.name, e.course_id\nFROM Students s\nLEFT JOIN Enrollments e ON s.student_id = e.student_id;",
-    options: ["6", "8", "9", "14"],
-    answer: 2,
-    explain: "The 8 enrolment rows match 5 students, and Nabila is added once with NULL: 8 + 1 = 9."
-  },
 
-  {
-    id: 66,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "What does SELECT COUNT(*) FROM ENROLLMENT; return?",
-    sql: null,
-    options: [
-      "6",
-      "7",
-      "8",
-      "5"
-    ],
-    answer: 2,
-    explain: "COUNT(*) counts rows, including the row whose Marks is NULL. COUNT(Marks) would give 7."
-  },
-  {
-    id: 67,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "How many rows does this return?",
-    sql: "SELECT StuID, MAX(Marks)\nFROM ENROLLMENT\nGROUP BY StuID;",
-    options: [
-      "8",
-      "6",
-      "5",
-      "1"
-    ],
-    answer: 2,
-    explain: "One row per distinct StuID in ENROLLMENT: S101–S105. S106 (Nabila) has no enrolment, so no group exists for her."
-  },
-  {
-    id: 68,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "Which StuID does this return?",
-    sql: "SELECT StuID\nFROM ENROLLMENT\nGROUP BY StuID\nHAVING AVG(Marks) > 80;",
-    options: [
-      "S101",
-      "S102",
-      "S101 and S102",
-      "S104"
-    ],
-    answer: 1,
-    explain: "Averages: S101 = 78.5, S102 = 89.5, S103 = 68, S104 = 55 (the NULL is ignored), S105 = 77. Only S102 passes."
-  },
-  {
-    id: 69,
-    section: "Aggregation & Joins",
-    weeks: [3],
-    dataset: "uni3",
-    q: "Who does this return?",
-    sql: "SELECT StuName FROM STUDENT\nWHERE StuID NOT IN (SELECT StuID FROM ENROLLMENT);",
-    options: [
-      "Nobody",
-      "Nabila",
-      "Mim",
-      "Nabila and Mim"
-    ],
-    answer: 1,
-    explain: "S106 Nabila is the only student with no ENROLLMENT row. (NOT IN is safe here because the subquery's StuID has no NULLs.)"
-  },
-  {
-    id: 70,
-    section: "Aggregation & Joins",
-    weeks: [4],
-    dataset: "joins",
-    q: "How many rows does this return?",
-    sql: "SELECT s.name, e.course_id\nFROM Students s\nJOIN Enrollments e ON s.student_id = e.student_id;",
-    options: [
-      "6",
-      "8",
-      "9",
-      "48"
-    ],
-    answer: 1,
-    explain: "Every one of the 8 enrolments points to an existing student, so the inner join gives 8 rows. Nabila drops out."
-  },
-  {
-    id: 71,
-    section: "Aggregation & Joins",
-    weeks: [4],
-    dataset: "joins",
-    q: "How many rows does this return?",
-    sql: "SELECT s.name, e.course_id\nFROM Students s\nLEFT JOIN Enrollments e ON s.student_id = e.student_id;",
-    options: [
-      "6",
-      "8",
-      "9",
-      "14"
-    ],
-    answer: 2,
-    explain: "The 8 matched rows plus one row for Nabila, who has no enrolment, with course_id = NULL."
-  },
-  {
-    id: 72,
-    section: "Aggregation & Joins",
-    weeks: [4],
-    dataset: "joins",
-    q: "Which course does this return?",
-    sql: "SELECT c.course_name\nFROM Courses c\nLEFT JOIN Enrollments e ON c.course_id = e.course_id\nWHERE e.enrollment_id IS NULL;",
-    options: [
-      "Thermodynamics",
-      "Machine Learning",
-      "Circuits",
-      "No rows"
-    ],
-    answer: 1,
-    explain: "Course 105 (Machine Learning) is the only course nobody is enrolled in. Thermodynamics has Mim's enrolment."
-  },
 
-  // Section 4: Stored Programs, Views & Triggers (Weeks 5–6) · Q73–Q100
+  // Section 4: Stored Programs, Views & Triggers (Weeks 5–6)
   {
-    id: 73,
+    id: 46,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -1100,7 +733,7 @@ export const mcqs: MCQ[] = [
     explain: "Procedures are invoked with CALL. They do not return a value into an expression, so they cannot sit inside a SELECT."
   },
   {
-    id: 74,
+    id: 47,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -1116,7 +749,7 @@ export const mcqs: MCQ[] = [
     explain: "Because a function returns exactly one value, it can be used anywhere an expression is allowed. A procedure is a standalone action."
   },
   {
-    id: 75,
+    id: 48,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -1132,7 +765,7 @@ export const mcqs: MCQ[] = [
     explain: "An INOUT parameter carries a value in and returns the modified value out, which is how a procedure passes a result back."
   },
   {
-    id: 76,
+    id: 49,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -1148,7 +781,7 @@ export const mcqs: MCQ[] = [
     explain: "SELECT … INTO variable assigns the query result to a PL/pgSQL variable (it is not CREATE TABLE AS here)."
   },
   {
-    id: 77,
+    id: 50,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -1164,55 +797,7 @@ export const mcqs: MCQ[] = [
     explain: "$$ is dollar quoting. The body is passed to PostgreSQL as one string literal, which keeps 'A+' and similar literals simple."
   },
   {
-    id: 78,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: "programs",
-    q: "GetGrade returns 'A+' for m >= 80, 'A' for m >= 60, else 'F'. What does SELECT GetGrade(72); return?",
-    sql: null,
-    options: [
-      "A+",
-      "A",
-      "F",
-      "NULL"
-    ],
-    answer: 1,
-    explain: "CASE takes the first branch that is true. 72 >= 80 is false, 72 >= 60 is true, so the result is 'A'."
-  },
-  {
-    id: 79,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: "programs",
-    q: "Using the same GetGrade function, what does SELECT GetGrade(80); return?",
-    sql: null,
-    options: [
-      "A+",
-      "A",
-      "F",
-      "An error"
-    ],
-    answer: 0,
-    explain: "The first condition is m >= 80, and 80 >= 80 is true, so 'A+' is returned."
-  },
-  {
-    id: 80,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: "programs",
-    q: "How many rows does this return on the Student table?",
-    sql: "CREATE VIEW CSE_Students AS\nSELECT id, name, cgpa FROM Student\nWHERE dept = 'CSE';\n\nSELECT * FROM CSE_Students WHERE cgpa > 3.5;",
-    options: [
-      "1",
-      "2",
-      "4",
-      "6"
-    ],
-    answer: 1,
-    explain: "The CSE students are Rafi 3.85, Anika 3.40, Fariha 3.92 and Tasmia 3.10. Only Rafi and Fariha are above 3.5."
-  },
-  {
-    id: 81,
+    id: 51,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -1228,7 +813,7 @@ export const mcqs: MCQ[] = [
     explain: "A view is a virtual table. Every query on it re-runs the stored SELECT against the live base tables."
   },
   {
-    id: 82,
+    id: 52,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -1244,7 +829,7 @@ export const mcqs: MCQ[] = [
     explain: "A view has no stored data, so it always reflects the current base table. Only materialized views need REFRESH."
   },
   {
-    id: 83,
+    id: 53,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: "programs",
@@ -1260,23 +845,7 @@ export const mcqs: MCQ[] = [
     explain: "A materialized view stores a snapshot. It stays stale until you refresh it."
   },
   {
-    id: 84,
-    section: "Programs, Views & Triggers",
-    weeks: [5],
-    dataset: "programs",
-    q: "How many rows does the Dept_Avg_CGPA materialized view hold?",
-    sql: "CREATE MATERIALIZED VIEW Dept_Avg_CGPA AS\nSELECT dept, AVG(cgpa) AS avg_cgpa\nFROM Student\nGROUP BY dept;",
-    options: [
-      "1",
-      "2",
-      "4",
-      "6"
-    ],
-    answer: 1,
-    explain: "One row per department: CSE and EEE."
-  },
-  {
-    id: 85,
+    id: 54,
     section: "Programs, Views & Triggers",
     weeks: [5],
     dataset: null,
@@ -1292,7 +861,7 @@ export const mcqs: MCQ[] = [
     explain: "Materialized views trade freshness for speed, which suits heavy aggregates that can tolerate a scheduled refresh."
   },
   {
-    id: 86,
+    id: 55,
     section: "Programs, Views & Triggers",
     weeks: [5,  6],
     dataset: null,
@@ -1308,7 +877,7 @@ export const mcqs: MCQ[] = [
     explain: "Trigger functions are declared RETURNS TRIGGER and are then attached with CREATE TRIGGER … EXECUTE FUNCTION."
   },
   {
-    id: 87,
+    id: 56,
     section: "Programs, Views & Triggers",
     weeks: [5,  6],
     dataset: null,
@@ -1324,7 +893,7 @@ export const mcqs: MCQ[] = [
     explain: "A trigger is bound to a table event. The event itself fires it; no one calls it explicitly."
   },
   {
-    id: 88,
+    id: 57,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1340,7 +909,7 @@ export const mcqs: MCQ[] = [
     explain: "NEW is the row being inserted. There is no previous row, so OLD is not available."
   },
   {
-    id: 89,
+    id: 58,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1356,7 +925,7 @@ export const mcqs: MCQ[] = [
     explain: "OLD is the row being deleted. Nothing replaces it, so NEW is not available."
   },
   {
-    id: 90,
+    id: 59,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1372,7 +941,7 @@ export const mcqs: MCQ[] = [
     explain: "In a BEFORE row trigger, returning NULL cancels the operation for that row. RETURN NEW lets it continue."
   },
   {
-    id: 91,
+    id: 60,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1388,7 +957,7 @@ export const mcqs: MCQ[] = [
     explain: "AFTER triggers run once the change has happened, so the logged values match what was actually stored."
   },
   {
-    id: 92,
+    id: 61,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1404,23 +973,7 @@ export const mcqs: MCQ[] = [
     explain: "INSTEAD OF triggers let you define what an INSERT, UPDATE or DELETE on a view should do to the underlying tables."
   },
   {
-    id: 93,
-    section: "Programs, Views & Triggers",
-    weeks: [6],
-    dataset: "triggers",
-    q: "employee has 4 rows and an AFTER UPDATE … FOR EACH ROW trigger that writes one salary_audit row per change. How many audit rows does this add?",
-    sql: "UPDATE employee SET salary = salary * 1.10;",
-    options: [
-      "0",
-      "1",
-      "4",
-      "8"
-    ],
-    answer: 2,
-    explain: "FOR EACH ROW fires once per affected row. The UPDATE has no WHERE, so all 4 rows change. A FOR EACH STATEMENT trigger would fire once."
-  },
-  {
-    id: 94,
+    id: 62,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1436,7 +989,7 @@ export const mcqs: MCQ[] = [
     explain: "TG_OP lets one function handle several events, e.g. IF TG_OP = 'DELETE' THEN …"
   },
   {
-    id: 95,
+    id: 63,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: "triggers",
@@ -1452,7 +1005,7 @@ export const mcqs: MCQ[] = [
     explain: "DISABLE TRIGGER pauses it; ENABLE TRIGGER turns it back on. DROP TRIGGER removes it for good."
   },
   {
-    id: 96,
+    id: 64,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1468,7 +1021,7 @@ export const mcqs: MCQ[] = [
     explain: "pg_dump writes a consistent backup of one database without taking it offline. pg_dumpall covers all databases plus roles."
   },
   {
-    id: 97,
+    id: 65,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1484,7 +1037,7 @@ export const mcqs: MCQ[] = [
     explain: "-Fc selects the custom format, which is compressed and must be restored with pg_restore."
   },
   {
-    id: 98,
+    id: 66,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1500,7 +1053,7 @@ export const mcqs: MCQ[] = [
     explain: "Custom and directory formats need pg_restore. A plain .sql script is run with psql -f instead."
   },
   {
-    id: 99,
+    id: 67,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1516,7 +1069,7 @@ export const mcqs: MCQ[] = [
     explain: "pg_dump works on one database; pg_dumpall includes every database plus the cluster-wide roles."
   },
   {
-    id: 100,
+    id: 68,
     section: "Programs, Views & Triggers",
     weeks: [6],
     dataset: null,
@@ -1532,9 +1085,9 @@ export const mcqs: MCQ[] = [
     explain: "A plain dump is just SQL, so it is replayed with psql into an existing (newly created) database."
   },
 
-  // Section 5: Database Transactions · Q101–Q120
+  // Section 5: Database Transactions
   {
-    id: 101,
+    id: 69,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1545,7 +1098,7 @@ export const mcqs: MCQ[] = [
     explain: "Atomicity: all statements of a transaction succeed together or none of them take effect."
   },
   {
-    id: 102,
+    id: 70,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1556,7 +1109,7 @@ export const mcqs: MCQ[] = [
     explain: "Isolation keeps concurrent transactions from seeing each other's uncommitted work."
   },
   {
-    id: 103,
+    id: 71,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1567,7 +1120,7 @@ export const mcqs: MCQ[] = [
     explain: "Once COMMIT succeeds, the change is permanent (PostgreSQL uses its write-ahead log for this)."
   },
   {
-    id: 104,
+    id: 72,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1578,7 +1131,7 @@ export const mcqs: MCQ[] = [
     explain: "For example, a CHECK (balance >= 0) constraint can never be left violated after a commit."
   },
   {
-    id: 105,
+    id: 73,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1594,34 +1147,7 @@ export const mcqs: MCQ[] = [
     explain: "That is why a mistake such as an UPDATE without WHERE cannot be undone in autocommit mode."
   },
   {
-    id: 106,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "What are the balances after this script?",
-    sql: "BEGIN;\nUPDATE account SET balance = balance + 500000;\nROLLBACK;",
-    options: [
-      "Every balance is 500000 higher",
-      "The original balances (A-101 1000 … E-505 3000)",
-      "All balances are 0",
-      "Only the first account changed"
-    ],
-    answer: 1,
-    explain: "ROLLBACK throws away every change made since BEGIN."
-  },
-  {
-    id: 107,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "In autocommit mode, a clerk transfers 500 Tk from A-101 to B-202 but types 'B-2O2' (letter O) in the second statement. What is SUM(balance) afterwards?",
-    sql: "UPDATE account SET balance = balance - 500 WHERE acc_no = 'A-101';\nUPDATE account SET balance = balance + 500 WHERE acc_no = 'B-2O2';",
-    options: ["8000", "8500", "7500", "7000"],
-    answer: 2,
-    explain: "The first update is saved; the second updates 0 rows with no error, so 500 Tk 'vanishes'."
-  },
-  {
-    id: 108,
+    id: 74,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1637,7 +1163,7 @@ export const mcqs: MCQ[] = [
     explain: "The savepoint is kept, so you can roll back to it again."
   },
   {
-    id: 109,
+    id: 75,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1653,7 +1179,7 @@ export const mcqs: MCQ[] = [
     explain: "The transaction is still open and can still be rolled back as a whole."
   },
   {
-    id: 110,
+    id: 76,
     section: "Transactions",
     weeks: [7],
     dataset: "txn_lab",
@@ -1669,45 +1195,7 @@ export const mcqs: MCQ[] = [
     explain: "After RELEASE, the bookmark is gone, so you cannot roll back to it."
   },
   {
-    id: 111,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "The Keyboard (product 5) starts with stock 50. What is the final stock?",
-    sql: "BEGIN;\nUPDATE product SET stock = stock + 10 WHERE product_id = 5;\nSAVEPOINT s1;\nUPDATE product SET stock = stock + 10 WHERE product_id = 5;\nROLLBACK TO SAVEPOINT s1;\nCOMMIT;",
-    options: ["50", "70", "60", "80"],
-    answer: 2,
-    explain: "Only the second batch is undone: 50 + 10 = 60 (Week 7 Lab, Part A)."
-  },
-  {
-    id: 112,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "Stock starts at 60. What is the stock right after ROLLBACK TO SAVEPOINT s3?",
-    sql: "BEGIN;\nUPDATE product SET stock = stock + 5  WHERE product_id = 5;  SAVEPOINT s1;\nUPDATE product SET stock = stock + 15 WHERE product_id = 5;  SAVEPOINT s2;\nUPDATE product SET stock = stock - 8  WHERE product_id = 5;  SAVEPOINT s3;\nUPDATE product SET stock = stock + 20 WHERE product_id = 5;\nROLLBACK TO SAVEPOINT s3;",
-    options: ["92", "80", "65", "72"],
-    answer: 3,
-    explain: "60 + 5 + 15 − 8 = 72. Only the wrong +20 is undone (Week 7 Lab, Part B)."
-  },
-  {
-    id: 113,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "Nila (D-404) has 500. What is saved after this script?",
-    sql: "BEGIN;\nUPDATE account SET balance = balance + 1500 WHERE acc_no = 'E-505';\nUPDATE account SET balance = balance - 1500 WHERE acc_no = 'D-404';\nCOMMIT;",
-    options: [
-      "Nothing; PostgreSQL turns the COMMIT of a failed transaction into a ROLLBACK",
-      "Only Sumi's +1500",
-      "Both updates",
-      "Nila's balance becomes −1000"
-    ],
-    answer: 0,
-    explain: "The transfer is all-or-nothing, so Sumi's credit is undone too (atomicity). The negative balance triggers CHECK (balance >= 0) violation."
-  },
-  {
-    id: 114,
+    id: 77,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1723,23 +1211,7 @@ export const mcqs: MCQ[] = [
     explain: "Every further statement is refused until you end the transaction with ROLLBACK (or COMMIT, which then acts as a rollback)."
   },
   {
-    id: 115,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "Tab 1 runs BEGIN; UPDATE account SET balance = balance + 1000 WHERE acc_no = 'C-303'; and has not committed. Tab 2 then runs SELECT balance FROM account WHERE acc_no = 'C-303';. What does Tab 2 see?",
-    sql: null,
-    options: [
-      "2500",
-      "1500",
-      "1000",
-      "Tab 2 waits until Tab 1 finishes"
-    ],
-    answer: 1,
-    explain: "Uncommitted changes are invisible to other sessions (isolation), and a plain SELECT in PostgreSQL does not wait for the writer."
-  },
-  {
-    id: 116,
+    id: 78,
     section: "Transactions",
     weeks: [7],
     dataset: null,
@@ -1755,55 +1227,7 @@ export const mcqs: MCQ[] = [
     explain: "BEGIN (or START TRANSACTION) opens the block. Everything until COMMIT or ROLLBACK is one unit."
   },
   {
-    id: 117,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "A-101 starts at 1000. What does the final SELECT show?",
-    sql: "BEGIN;\nUPDATE account SET balance = balance - 200 WHERE acc_no = 'A-101';\nROLLBACK;\nSELECT balance FROM account WHERE acc_no = 'A-101';",
-    options: [
-      "800",
-      "1000",
-      "1200",
-      "0"
-    ],
-    answer: 1,
-    explain: "ROLLBACK undoes every change made since BEGIN, so the balance is back to 1000."
-  },
-  {
-    id: 118,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "Sumi (E-505) starts at 3000. What is her balance after this script?",
-    sql: "BEGIN;\nUPDATE account SET balance = balance - 500 WHERE acc_no = 'E-505';\nSAVEPOINT s1;\nUPDATE account SET balance = balance - 1000 WHERE acc_no = 'E-505';\nROLLBACK TO SAVEPOINT s1;\nCOMMIT;",
-    options: [
-      "3000",
-      "2500",
-      "1500",
-      "2000"
-    ],
-    answer: 1,
-    explain: "ROLLBACK TO s1 undoes only the −1000. The −500 made before the savepoint is kept and committed."
-  },
-  {
-    id: 119,
-    section: "Transactions",
-    weeks: [7],
-    dataset: "txn_lab",
-    q: "The five accounts hold 8000 Tk in total. Inside BEGIN … COMMIT, 500 Tk is moved from A-101 to B-202 and both UPDATEs succeed. What is SUM(balance) afterwards?",
-    sql: null,
-    options: [
-      "7500",
-      "8000",
-      "8500",
-      "9000"
-    ],
-    answer: 1,
-    explain: "A transfer only moves money between rows, so the total stays 8000. Keeping such rules true is the Consistency in ACID."
-  },
-  {
-    id: 120,
+    id: 79,
     section: "Transactions",
     weeks: [7],
     dataset: "txn_lab",
