@@ -11,6 +11,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { course } from '../data/course';
+import { mcqs } from '../data/mcq';
 
 interface HomePageProps {
   onNavigate: (route: string) => void;
@@ -223,7 +224,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectWeek }) 
           >
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-c-sql">Self-Test</span>
-              <h3 className="font-bold text-base text-text mt-1">70-Question MCQ Practice</h3>
+              <h3 className="font-bold text-base text-text mt-1">{mcqs.length}-Question MCQ Practice</h3>
               <p className="text-xs text-text-muted mt-1 leading-relaxed">
                 Complete SQL Review covering DDL, DML, Aggregations, Joins, and Transactions.
               </p>

@@ -29,7 +29,7 @@ interface McqPageProps {
 export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
   // Setup state
   const [hasStarted, setHasStarted] = useState<boolean>(false);
-  const [mode, setMode] = useState<'practice' | 'exam' | 'overview'>('practice');
+  const [mode, setMode] = useState<'practice' | 'exam' | 'overview'>('overview');
   const [selectedSection, setSelectedSection] = useState<string>('All');
   const [questionCount, setQuestionCount] = useState<number>(TOTAL);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
@@ -44,7 +44,8 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
   const [filterReview, setFilterReview] = useState<'all' | 'wrong'>('all');
 
   // Quick Overview state
-  const [overviewRevealed, setOverviewRevealed] = useState<Record<number, boolean>>({});
+  // Answers are expanded by default; this tracks the ones the student has hidden
+  const [overviewHidden, setOverviewHidden] = useState<Record<number, boolean>>({});
   const [overviewSection, setOverviewSection] = useState<string>('All');
   const [overviewSearch, setOverviewSearch] = useState<string>('');
 
@@ -54,12 +55,13 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
       pool = pool.filter(q => q.section === selectedSection);
     }
     if (isShuffled) {
-      pool.sort(() => Math.random() - 0.5);
+      // Fisher–Yates shuffle (unbiased, unlike sort with a random comparator)
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
     }
-    const finalSet = mode === 'overview' ? pool : pool.slice(0, Math.min(questionCount, pool.length));
-    setOverviewRevealed({});
-    setOverviewSection('All');
-    setOverviewSearch('');
+    const finalSet = pool.slice(0, Math.min(questionCount, pool.length));
     setActiveQuestions(finalSet);
     setCurrentIndex(0);
     setUserAnswers({});
@@ -128,214 +130,106 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
     };
   }, [activeQuestions, userAnswers]);
 
-  if (!hasStarted) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="custom-card p-6 sm:p-8">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-c-sql/10 text-c-sql">
-              Complete SQL Review · {TOTAL} Questions
-            </span>
-          </div>
+  // ---------- Mode switcher (always shown at the top outside an active session) ----------
+  const MODE_CARDS: { id: 'overview' | 'practice' | 'exam'; title: string; desc: string; icon: React.ReactNode }[] = [
+    {
+      id: 'overview',
+      title: 'Quick Overview (Read All)',
+      desc: 'Every question with its options and answers, all expanded. Hide or reveal answers per question or all at once.',
+      icon: <ListChecks className="w-4 h-4" />
+    },
+    {
+      id: 'practice',
+      title: 'Practice Mode (Instant Feedback)',
+      desc: 'One question at a time. The correct answer and explanation appear as soon as you pick an option.',
+      icon: <BookOpen className="w-4 h-4" />
+    },
+    {
+      id: 'exam',
+      title: 'Exam Mode (Submit at End)',
+      desc: 'Answer everything, flag doubtful items, then submit to see your score and section breakdown.',
+      icon: <Clock className="w-4 h-4" />
+    }
+  ];
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-text">
-            SQL MCQ Practice &amp; Exam Review
-          </h1>
-          <p className="text-sm text-text-muted mt-2 leading-relaxed">
-            Test and consolidate your knowledge across all 5 key course areas: Data Definition Language (DDL), DML &amp; Querying, Aggregation &amp; Joins, Stored Programs, Views &amp; Triggers, and Database Transactions.
-          </p>
-
-          <div className="mt-8 space-y-6">
-            {/* Mode selection */}
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
-                1. Select Study Mode
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div
-                  onClick={() => setMode('practice')}
-                  className={`p-4 rounded-xl border cursor-pointer transition ${
-                    mode === 'practice'
-                      ? 'border-primary ring-2 ring-primary/20 bg-primary/5'
-                      : 'border-border bg-surface hover:bg-surface-2'
-                  }`}
-                >
-                  <div className="font-bold text-sm text-text flex items-center justify-between">
-                    Practice Mode (Instant Feedback)
-                    {mode === 'practice' && <CheckCircle2 className="w-4 h-4 text-primary" />}
-                  </div>
-                  <p className="text-xs text-text-muted mt-1">
-                    Shows correct answers and explanations immediately as you pick each option. Perfect for learning.
-                  </p>
-                </div>
-
-                <div
-                  onClick={() => setMode('exam')}
-                  className={`p-4 rounded-xl border cursor-pointer transition ${
-                    mode === 'exam'
-                      ? 'border-primary ring-2 ring-primary/20 bg-primary/5'
-                      : 'border-border bg-surface hover:bg-surface-2'
-                  }`}
-                >
-                  <div className="font-bold text-sm text-text flex items-center justify-between">
-                    Exam Mode (Submit at End)
-                    {mode === 'exam' && <CheckCircle2 className="w-4 h-4 text-primary" />}
-                  </div>
-                  <p className="text-xs text-text-muted mt-1">
-                    Simulates a timed lab test. Answer everything, review flagged items, and see your comprehensive score breakdown upon submission.
-                  </p>
-                </div>
-
-                <div
-                  onClick={() => setMode('overview')}
-                  className={`p-4 rounded-xl border cursor-pointer transition ${
-                    mode === 'overview'
-                      ? 'border-primary ring-2 ring-primary/20 bg-primary/5'
-                      : 'border-border bg-surface hover:bg-surface-2'
-                  }`}
-                >
-                  <div className="font-bold text-sm text-text flex items-center justify-between">
-                    Quick Overview (Read All)
-                    {mode === 'overview' && <CheckCircle2 className="w-4 h-4 text-primary" />}
-                  </div>
-                  <p className="text-xs text-text-muted mt-1">
-                    Lists every question with its options. Reveal the right answer per question, or show all answers at once.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Section filter */}
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
-                2. Select Syllabus Section
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {SECTIONS.map((sec) => (
-                  <button
-                    key={sec}
-                    onClick={() => setSelectedSection(sec)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                      selectedSection === sec
-                        ? 'bg-primary text-white shadow-xs'
-                        : 'bg-surface-2 hover:bg-border text-text'
-                    }`}
-                  >
-                    {sec} ({sec === 'All' ? TOTAL : mcqs.filter(q => q.section === sec).length})
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Number of questions */}
-            {mode !== 'overview' && (<>
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
-                3. Number of Questions
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {[10, 20, 40, 60, TOTAL].map((num) => (
-                  <button
-                    key={num}
-                    onClick={() => setQuestionCount(num)}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition ${
-                      questionCount === num
-                        ? 'bg-primary text-white'
-                        : 'bg-surface-2 hover:bg-border text-text'
-                    }`}
-                  >
-                    {num === TOTAL ? `${TOTAL} (All Questions)` : `${num} Questions`}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Shuffling toggle */}
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="shuffle"
-                checked={isShuffled}
-                onChange={(e) => setIsShuffled(e.target.checked)}
-                className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer"
-              />
-              <label htmlFor="shuffle" className="text-xs font-medium text-text cursor-pointer">
-                Shuffle question order
-              </label>
-            </div>
-            </>)}
-
-            {/* Launch button */}
-            <button
-              onClick={startQuiz}
-              className="w-full py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition shadow-sm cursor-pointer flex items-center justify-center gap-2"
-            >
-              {mode === 'overview'
-                ? <><ListChecks className="w-4 h-4" /> Open Quick Overview</>
-                : <>Start {mode === 'exam' ? 'Exam' : 'Practice'} Session <ArrowRight className="w-4 h-4" /></>}
-            </button>
-          </div>
-        </div>
+  const modeSwitcher = (
+    <div className="custom-card p-5 sm:p-6 mb-4">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-c-sql/10 text-c-sql">
+          Complete SQL Review · {TOTAL} Questions
+        </span>
       </div>
-    );
-  }
+      <h1 className="text-2xl sm:text-3xl font-extrabold text-text">SQL MCQ Practice &amp; Exam Review</h1>
+      <p className="text-sm text-text-muted mt-1.5 leading-relaxed">
+        DDL, DML &amp; querying, aggregation &amp; joins, stored programs, views &amp; triggers, and transactions.
+      </p>
 
-  // Quick Overview Mode — every question with options, answers revealed on demand
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+        {MODE_CARDS.map(card => {
+          const active = mode === card.id;
+          return (
+            <button
+              key={card.id}
+              onClick={() => setMode(card.id)}
+              className={`p-4 rounded-xl border text-left cursor-pointer transition ${
+                active
+                  ? 'border-primary ring-2 ring-primary/20 bg-primary/5'
+                  : 'border-border bg-surface hover:bg-surface-2'
+              }`}
+            >
+              <div className={`font-bold text-sm flex items-center justify-between gap-2 ${active ? 'text-primary' : 'text-text'}`}>
+                <span className="flex items-center gap-2">{card.icon} {card.title}</span>
+                {active && <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />}
+              </div>
+              <p className="text-xs text-text-muted mt-1 leading-relaxed">{card.desc}</p>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  // ---------- Quick Overview (default view) ----------
   if (mode === 'overview') {
     const term = overviewSearch.trim().toLowerCase();
-    const shown = activeQuestions.filter(q =>
+    const shown = mcqs.filter(q =>
       (overviewSection === 'All' || q.section === overviewSection) &&
       (!term ||
         q.q.toLowerCase().includes(term) ||
         (q.sql || '').toLowerCase().includes(term) ||
+        q.explain.toLowerCase().includes(term) ||
         q.options.some(o => o.toLowerCase().includes(term)))
     );
-    const revealedCount = shown.filter(q => overviewRevealed[q.id]).length;
+    const isOpenQ = (id: number) => !overviewHidden[id];
+    const revealedCount = shown.filter(q => isOpenQ(q.id)).length;
     const allShown = shown.length > 0 && revealedCount === shown.length;
 
-    const setAll = (value: boolean) => {
-      setOverviewRevealed(prev => {
+    const setAll = (open: boolean) => {
+      setOverviewHidden(prev => {
         const next = { ...prev };
-        shown.forEach(q => { next[q.id] = value; });
+        shown.forEach(q => { next[q.id] = !open; });
         return next;
       });
     };
 
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="custom-card p-5 sm:p-6 mb-4">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-primary">Quick Overview</span>
-              <h2 className="text-xl sm:text-2xl font-black text-text mt-1">All Questions, Options &amp; Answers</h2>
-              <p className="text-xs text-text-muted mt-1">
-                Read through every question at once. Reveal answers one by one, or all together.
-              </p>
-            </div>
-            <button
-              onClick={() => setHasStarted(false)}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-text hover:bg-surface-2 transition flex items-center gap-1.5 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" /> Back to setup
-            </button>
-          </div>
+        {modeSwitcher}
 
-          <div className="flex flex-wrap gap-2 mt-4">
-            {SECTIONS.map(sec => {
-              const count = sec === 'All' ? activeQuestions.length : activeQuestions.filter(q => q.section === sec).length;
-              if (count === 0) return null;
-              return (
-                <button
-                  key={sec}
-                  onClick={() => setOverviewSection(sec)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    overviewSection === sec ? 'bg-primary text-white' : 'bg-surface-2 hover:bg-border text-text'
-                  }`}
-                >
-                  {sec} ({count})
-                </button>
-              );
-            })}
+        <div className="custom-card p-4 sm:p-5 mb-4">
+          <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Filter by section</label>
+          <div className="flex flex-wrap gap-2">
+            {SECTIONS.map(sec => (
+              <button
+                key={sec}
+                onClick={() => setOverviewSection(sec)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  overviewSection === sec ? 'bg-primary text-white' : 'bg-surface-2 hover:bg-border text-text'
+                }`}
+              >
+                {sec} ({sec === 'All' ? TOTAL : mcqs.filter(q => q.section === sec).length})
+              </button>
+            ))}
           </div>
         </div>
 
@@ -348,7 +242,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                 type="text"
                 value={overviewSearch}
                 onChange={(e) => setOverviewSearch(e.target.value)}
-                placeholder="Search questions, SQL or options…"
+                placeholder="Search questions, SQL, options or explanations…"
                 className="w-full pl-8 pr-3 py-2 rounded-lg bg-surface-2 border border-border text-xs text-text focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
@@ -372,7 +266,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
 
         <div className="space-y-4">
           {shown.map((q) => {
-            const isOpen = !!overviewRevealed[q.id];
+            const isOpen = isOpenQ(q.id);
             return (
               <div key={q.id} id={`ov-q-${q.id}`} className="custom-card p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs mb-2">
@@ -382,7 +276,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                     <span className="text-text-muted hidden sm:inline">· Week {q.weeks.join(', ')}</span>
                   </div>
                   <button
-                    onClick={() => setOverviewRevealed(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                    onClick={() => setOverviewHidden(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
                     className={`px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer ${
                       isOpen ? 'bg-success/10 text-success hover:bg-success/20' : 'bg-surface-2 text-text hover:bg-border'
                     }`}
@@ -429,6 +323,83 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
               </div>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+
+  // ---------- Practice / Exam setup ----------
+  if (!hasStarted) {
+    const poolSize = selectedSection === 'All' ? TOTAL : mcqs.filter(q => q.section === selectedSection).length;
+    const countOptions = Array.from(new Set([10, 20, 40, 60].filter(n => n < poolSize).concat(poolSize)));
+    const effectiveCount = Math.min(questionCount, poolSize);
+
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {modeSwitcher}
+
+        <div className="custom-card p-5 sm:p-6 space-y-6">
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
+              1. Select Syllabus Section
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {SECTIONS.map((sec) => (
+                <button
+                  key={sec}
+                  onClick={() => setSelectedSection(sec)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                    selectedSection === sec
+                      ? 'bg-primary text-white shadow-xs'
+                      : 'bg-surface-2 hover:bg-border text-text'
+                  }`}
+                >
+                  {sec} ({sec === 'All' ? TOTAL : mcqs.filter(q => q.section === sec).length})
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
+              2. Number of Questions
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {countOptions.map((num) => (
+                <button
+                  key={num}
+                  onClick={() => setQuestionCount(num)}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                    effectiveCount === num
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-2 hover:bg-border text-text'
+                  }`}
+                >
+                  {num === poolSize ? `${num} (All in section)` : `${num} Questions`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="shuffle"
+              checked={isShuffled}
+              onChange={(e) => setIsShuffled(e.target.checked)}
+              className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer"
+            />
+            <label htmlFor="shuffle" className="text-xs font-medium text-text cursor-pointer">
+              Shuffle question order
+            </label>
+          </div>
+
+          <button
+            onClick={startQuiz}
+            className="w-full py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition shadow-sm cursor-pointer flex items-center justify-center gap-2"
+          >
+            Start {mode === 'exam' ? 'Exam' : 'Practice'} Session · {effectiveCount} Questions <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
     );
@@ -578,6 +549,16 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
       {/* Quiz Top bar */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              if (Object.keys(userAnswers).length === 0 || confirm('Leave this session? Your answers will be lost.')) {
+                setHasStarted(false);
+              }
+            }}
+            className="px-2.5 py-1 rounded-md border border-border text-xs font-semibold text-text hover:bg-surface-2 transition flex items-center gap-1 cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Exit
+          </button>
           <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-primary/10 text-primary">
             {currentQ.section}
           </span>
