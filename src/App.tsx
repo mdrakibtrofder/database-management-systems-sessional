@@ -137,8 +137,9 @@ export default function App() {
   }, []);
 
   // Main navigation items as shown in reference header:
-  // Roadmap | Slides | Labs | MCQ | Cheat Sheets | Glossary (+ Playground)
+  // Home | Roadmap | Slides | Labs | MCQ | Cheat Sheets | Glossary (+ Playground)
   const navItems = [
+    { id: 'home', label: 'Home' },
     { id: 'weeks', label: 'Roadmap' },
     { id: 'slides', label: 'Slides' },
     { id: 'labs', label: 'Labs' },
@@ -175,6 +176,7 @@ export default function App() {
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             {navItems.map((item) => {
               const isActive =
+                (item.id === 'home' && currentRoute === 'home') ||
                 (item.id === 'weeks' && (currentRoute === 'weeks' || currentRoute === 'week-detail')) ||
                 (item.id === 'slides' && currentRoute === 'slides') ||
                 (item.id === 'labs' && currentRoute === 'labs') ||

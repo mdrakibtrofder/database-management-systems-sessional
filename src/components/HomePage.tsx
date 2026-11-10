@@ -1,129 +1,222 @@
 import React from 'react';
 import {
-  Sparkles,
   ArrowRight,
+  ArrowDown,
   Database,
-  GraduationCap,
-  Calendar,
+  Table2,
+  KeyRound,
+  ShieldCheck,
+  Repeat,
+  Code2,
   Layers,
+  Map,
+  Presentation,
+  FlaskConical,
+  ListChecks,
+  FileText,
+  BookA,
   Terminal,
-  Award,
-  ChevronRight
+  User
 } from 'lucide-react';
 import { course } from '../data/course';
 import { mcqs } from '../data/mcq';
+import { slideDecks } from '../data/slides';
+import { cheatsheets } from '../data/cheatsheets';
+import { glossaryTerms } from '../data/glossary';
 
 interface HomePageProps {
   onNavigate: (route: string) => void;
   onSelectWeek: (weekId: number) => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectWeek }) => {
+// Core DBMS ideas — one short card each
+const KEY_IDEAS = [
+  {
+    icon: Database,
+    title: 'Data & Database',
+    text: 'Data are raw facts (a name, a mark, a price). A database is an organised, shared collection of related data stored for long-term use.',
+    accent: 'text-c-foundations bg-c-foundations/10'
+  },
+  {
+    icon: Table2,
+    title: 'Tables (Relations)',
+    text: 'A relational DBMS stores data in tables. Each row (tuple) is one record; each column (attribute) holds one kind of value with a fixed data type.',
+    accent: 'text-c-relational bg-c-relational/10'
+  },
+  {
+    icon: KeyRound,
+    title: 'Keys & Constraints',
+    text: 'A PRIMARY KEY identifies each row uniquely; a FOREIGN KEY links tables. NOT NULL, UNIQUE, CHECK and DEFAULT keep the data valid.',
+    accent: 'text-c-sql bg-c-sql/10'
+  },
+  {
+    icon: Code2,
+    title: 'SQL',
+    text: 'Structured Query Language is how we talk to the DBMS: define tables, add and change rows, and ask questions of the data.',
+    accent: 'text-c-storage bg-c-storage/10'
+  },
+  {
+    icon: Repeat,
+    title: 'Transactions & ACID',
+    text: 'A transaction groups statements into one all-or-nothing unit. ACID — Atomicity, Consistency, Isolation, Durability — keeps data correct even on failure.',
+    accent: 'text-c-txn bg-c-txn/10'
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Why a DBMS, not files?',
+    text: 'Less duplicate data, safe access by many users at once, security, backup & recovery, and powerful queries — things plain files cannot give.',
+    accent: 'text-c-modern bg-c-modern/10'
+  }
+];
+
+// SQL command families covered in the lab
+const SQL_FAMILIES = [
+  { tag: 'DDL', name: 'Data Definition', cmds: 'CREATE · ALTER · DROP · TRUNCATE' },
+  { tag: 'DML', name: 'Data Manipulation', cmds: 'INSERT · UPDATE · DELETE' },
+  { tag: 'DQL', name: 'Data Query', cmds: 'SELECT · WHERE · GROUP BY · JOIN' },
+  { tag: 'TCL', name: 'Transaction Control', cmds: 'BEGIN · COMMIT · ROLLBACK · SAVEPOINT' }
+];
+
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
+  // Every page of the site, shown as a card
+  const PAGES = [
+    {
+      route: 'weeks',
+      icon: Map,
+      label: 'Roadmap',
+      title: 'Weekly Roadmap',
+      text: `All ${course.weeks.length} weekly modules with topics, SQL examples and lab tasks, from PostgreSQL basics to transactions.`,
+      accent: 'text-c-foundations bg-c-foundations/10'
+    },
+    {
+      route: 'slides',
+      icon: Presentation,
+      label: 'Slides',
+      title: 'Lab Slide Decks',
+      text: `${slideDecks.length} lab decks to view in the browser or download as PPTX / PDF.`,
+      accent: 'text-c-relational bg-c-relational/10'
+    },
+    {
+      route: 'labs',
+      icon: FlaskConical,
+      label: 'Labs',
+      title: 'Interactive Labs',
+      text: 'Hands-on visualizers for clause order, joins, GROUP BY and transaction savepoints.',
+      accent: 'text-c-storage bg-c-storage/10'
+    },
+    {
+      route: 'mcq',
+      icon: ListChecks,
+      label: 'MCQ Practice',
+      title: `${mcqs.length}-Question MCQ Bank`,
+      text: 'Quick overview with answers, instant-feedback practice, or a timed exam-style quiz.',
+      accent: 'text-c-sql bg-c-sql/10'
+    },
+    {
+      route: 'cheatsheets',
+      icon: FileText,
+      label: 'Cheat Sheets',
+      title: 'SQL Cheat Sheets',
+      text: `${cheatsheets.length} compact syntax references for DDL, DML, joins, aggregation, stored programs and transactions.`,
+      accent: 'text-c-txn bg-c-txn/10'
+    },
+    {
+      route: 'glossary',
+      icon: BookA,
+      label: 'Glossary',
+      title: 'Database Glossary',
+      text: `${glossaryTerms.length} DBMS terms explained in plain words, each linked to its week.`,
+      accent: 'text-c-modern bg-c-modern/10'
+    },
+    {
+      route: 'playground',
+      icon: Terminal,
+      label: 'Playground',
+      title: 'SQL Playground',
+      text: 'A real PostgreSQL engine running in your browser. Write and run queries on sample datasets — no install needed.',
+      accent: 'text-c-revision bg-c-revision/10'
+    }
+  ];
+
   return (
-    <div className="space-y-12 pb-16">
-      {/* Hero Section matching Screenshot_2026-11-09_at_9.33.59_AM_40b77d75.png */}
-      <section className="relative overflow-hidden pt-10 pb-16 px-4 sm:px-6">
+    <div className="space-y-14 pb-16">
+      {/* Hero: what is a DBMS */}
+      <section className="pt-10 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Large soft rounded container card */}
-          <div className="p-8 sm:p-12 lg:p-14 rounded-[28px] bg-surface-2/40 border border-border/80 relative overflow-hidden">
+          <div className="p-7 sm:p-12 rounded-[28px] bg-surface-2/40 border border-border/80">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              {/* Left Column Text Content */}
-              <div className="lg:col-span-7 space-y-6">
-                {/* Micro Meta Tag */}
-                <div className="text-xs font-semibold tracking-wide text-text-muted flex items-center gap-2">
+              <div className="lg:col-span-7 space-y-5">
+                <div className="text-xs font-semibold tracking-wide text-text-muted flex flex-wrap items-center gap-2">
                   <span className="text-primary font-bold">{course.code}</span>
                   <span>·</span>
-                  <span>Summer 2026</span>
+                  <span>DBMS Sessional</span>
                   <span>·</span>
                   <span>Level-2, Term-II</span>
                   <span>·</span>
                   <span>1.50 Credits</span>
                 </div>
 
-                {/* Big Two-Line Headline */}
-                <h1 className="text-4xl sm:text-6xl font-black text-text tracking-tight leading-[1.12]">
-                  Master Database <br />
-                  Management Systems, <br />
-                  <span className="text-primary">Week by Week.</span>
+                <h1 className="text-3xl sm:text-5xl font-black text-text tracking-tight leading-[1.12]">
+                  What is a <br className="hidden sm:block" />
+                  <span className="text-primary">Database Management System?</span>
                 </h1>
 
-                {/* Subtitle description */}
                 <p className="text-base sm:text-lg text-text-muted max-w-xl leading-relaxed">
-                  Official study portal for BAUST CSE students. Explore 14 structured weekly modules, 7 slide decks, hands-on SQL datasets, and 18 interactive concept visualizers.
+                  A <strong className="text-text">DBMS</strong> is software that stores, organises and protects data so that many
+                  users and programs can share it safely. You describe <em>what</em> data you want using SQL, and the DBMS
+                  works out <em>how</em> to store, find and update it.
+                </p>
+                <p className="text-sm text-text-muted max-w-xl leading-relaxed">
+                  Examples include PostgreSQL, MySQL, Oracle and SQL Server. In this sessional we use{' '}
+                  <strong className="text-text">PostgreSQL</strong>.
                 </p>
 
-                {/* Action Buttons */}
-                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
                     onClick={() => onNavigate('weeks')}
                     className="px-6 py-3.5 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition shadow-sm cursor-pointer flex items-center gap-2"
                   >
-                    Explore Weekly Roadmap <ArrowRight className="w-4 h-4" />
+                    Start with the Roadmap <ArrowRight className="w-4 h-4" />
                   </button>
-
                   <button
                     onClick={() => onNavigate('playground')}
                     className="px-6 py-3.5 rounded-2xl bg-surface hover:bg-surface-2 border border-border text-text font-bold text-sm transition cursor-pointer flex items-center gap-2.5"
                   >
-                    <Database className="w-4 h-4 text-primary" />
-                    Open SQL Playground
+                    <Terminal className="w-4 h-4 text-primary" /> Try SQL Now
                   </button>
                 </div>
-
-                {/* Instructor Footer Badge */}
-                <div className="pt-4 flex items-center gap-2 text-xs text-text-muted">
-                  <GraduationCap className="w-4 h-4 text-primary shrink-0" />
-                  <span>
-                    Instructor: <strong className="text-text font-semibold">Md. Rakib Trofder</strong>, Lecturer, Department of CSE, BAUST
-                  </span>
-                </div>
               </div>
 
-              {/* Right Column Interactive Visual Card (Matching the Reference Screenshot) */}
+              {/* How a DBMS sits between users and data */}
               <div className="lg:col-span-5">
-                <div className="p-6 sm:p-7 rounded-[26px] bg-white dark:bg-gray-900 border border-indigo-100 dark:border-indigo-950/60 shadow-lg shadow-indigo-500/5 space-y-6">
-                  {/* Relational Tuples preview */}
-                  <div>
-                    <div className="flex items-center justify-between text-xs font-semibold mb-2">
-                      <span className="text-slate-800 dark:text-slate-200">1. Relational Tuples</span>
-                      <span className="text-indigo-600 dark:text-indigo-400 font-mono font-bold">Student Table</span>
-                    </div>
+                <div className="p-6 rounded-[24px] bg-surface border border-border shadow-sm space-y-2.5 text-center">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-text-muted mb-1">How it fits together</div>
 
-                    <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden mb-3">
-                      <div className="bg-indigo-600 h-full rounded-full w-2/3" />
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono py-2.5 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 text-slate-700 dark:text-slate-300">
-                      <div>ID 101</div>
-                      <div className="font-semibold text-slate-900 dark:text-white">Rahim</div>
-                      <div>3.85</div>
-                    </div>
+                  <div className="px-4 py-3 rounded-xl bg-surface-2 border border-border flex items-center justify-center gap-2 text-sm font-semibold text-text">
+                    <User className="w-4 h-4 text-primary" /> User / Application
                   </div>
+                  <div className="flex flex-col items-center text-[11px] font-mono text-primary">
+                    <ArrowDown className="w-4 h-4" />
+                    <span>SELECT name FROM student WHERE cgpa &gt; 3.5;</span>
+                  </div>
+                  <div className="px-4 py-3.5 rounded-xl bg-primary text-white font-bold text-sm shadow-md flex items-center justify-center gap-2">
+                    <Layers className="w-4 h-4" /> DBMS (PostgreSQL)
+                  </div>
+                  <div className="text-[11px] text-text-muted">checks rules · plans the query · manages transactions</div>
+                  <div className="flex justify-center text-primary"><ArrowDown className="w-4 h-4" /></div>
 
-                  {/* B+ Tree Indexing indicator */}
-                  <div className="text-center space-y-3.5 pt-2">
-                    <div className="text-xs font-mono font-semibold text-indigo-600 dark:text-indigo-400 flex items-center justify-center gap-1.5">
-                      <span>↓</span>
-                      <span>B+ Tree Indexing O(log n)</span>
-                      <span>↓</span>
+                  <div className="rounded-xl border border-border overflow-hidden text-xs font-mono">
+                    <div className="px-3 py-1.5 bg-surface-2 text-left font-bold text-text flex items-center gap-1.5">
+                      <Database className="w-3.5 h-3.5 text-primary" /> Database · student
                     </div>
-
-                    {/* Root Node: Deep Royal Indigo from Screenshot */}
-                    <div className="inline-block px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-mono text-xs font-bold shadow-md shadow-indigo-600/20">
-                      [ 30 | 60 ]
+                    <div className="grid grid-cols-3 px-3 py-1.5 border-t border-border text-text-muted font-semibold">
+                      <span>id</span><span>name</span><span>cgpa</span>
                     </div>
-
-                    {/* Leaf Nodes: Crisp Green-cyan border tags */}
-                    <div className="flex items-center justify-center gap-2 pt-1 font-mono text-xs">
-                      <span className="px-3.5 py-1.5 rounded-xl border border-emerald-500 bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 font-bold shadow-xs">
-                        [ 10, 20 ]
-                      </span>
-                      <span className="px-3.5 py-1.5 rounded-xl border border-emerald-500 bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 font-bold shadow-xs">
-                        [ 30, 40 ]
-                      </span>
-                      <span className="px-3.5 py-1.5 rounded-xl border border-emerald-500 bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 font-bold shadow-xs">
-                        [ 60, 70 ]
-                      </span>
+                    <div className="grid grid-cols-3 px-3 py-1.5 border-t border-border text-text">
+                      <span>101</span><span>Rahim</span><span>3.85</span>
+                    </div>
+                    <div className="grid grid-cols-3 px-3 py-1.5 border-t border-border text-text">
+                      <span>102</span><span>Karim</span><span>3.40</span>
                     </div>
                   </div>
                 </div>
@@ -133,124 +226,67 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectWeek }) 
         </div>
       </section>
 
-      {/* Target Days Roadmap Strip (Matching Screenshot_2026-11-09_at_9.34.21_AM_1f144e29.png top row) */}
+      {/* Key ideas */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div
-            onClick={() => onSelectWeek(1)}
-            className="p-5 rounded-[20px] bg-surface border border-border hover:border-primary/50 transition cursor-pointer flex flex-col justify-between"
-          >
-            <div className="flex items-center justify-between text-xs font-mono text-primary font-bold mb-2">
-              <span>Target Day 1–3</span>
-              <ArrowRight className="w-4 h-4" />
+        <h2 className="text-xl sm:text-2xl font-bold text-text">DBMS in six ideas</h2>
+        <p className="text-sm text-text-muted mt-1 mb-5">The core vocabulary you will use in every lab.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {KEY_IDEAS.map(({ icon: Icon, title, text, accent }) => (
+            <div key={title} className="custom-card p-5">
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${accent}`}>
+                <Icon className="w-4.5 h-4.5" />
+              </div>
+              <h3 className="font-bold text-base text-text">{title}</h3>
+              <p className="text-sm text-text-muted mt-1.5 leading-relaxed">{text}</p>
             </div>
-            <h4 className="font-bold text-sm text-text leading-tight">
-              Week 1: PostgreSQL &amp; SQL Basics (SELECT, WHERE, LIMIT)
-            </h4>
-          </div>
-
-          <div
-            onClick={() => onSelectWeek(3)}
-            className="p-5 rounded-[20px] bg-surface border border-border hover:border-primary/50 transition cursor-pointer flex flex-col justify-between"
-          >
-            <div className="flex items-center justify-between text-xs font-mono text-primary font-bold mb-2">
-              <span>Target Day 4–6</span>
-              <ArrowRight className="w-4 h-4" />
-            </div>
-            <h4 className="font-bold text-sm text-text leading-tight">
-              Week 3: Advanced SQL: Aggregations, Grouping &amp; Subqueries
-            </h4>
-          </div>
-
-          <div
-            onClick={() => onSelectWeek(7)}
-            className="p-5 rounded-[20px] bg-surface border border-border hover:border-primary/50 transition cursor-pointer flex flex-col justify-between"
-          >
-            <div className="flex items-center justify-between text-xs font-mono text-primary font-bold mb-2">
-              <span>Target Day 7–9</span>
-              <ArrowRight className="w-4 h-4" />
-            </div>
-            <h4 className="font-bold text-sm text-text leading-tight">
-              Week 7: Transactions Lab: COMMIT, ROLLBACK &amp; Savepoints
-            </h4>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Quick Navigation Cards */}
+      {/* SQL command families */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-text">Essential Sessional Study Portals</h2>
-        </div>
-
+        <h2 className="text-xl sm:text-2xl font-bold text-text">The SQL command families</h2>
+        <p className="text-sm text-text-muted mt-1 mb-5">Every statement you write in this course belongs to one of these groups.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div
-            onClick={() => onNavigate('slides')}
-            className="custom-card p-5 hover:border-primary/50 cursor-pointer transition flex flex-col justify-between"
-          >
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Lab Decks</span>
-              <h3 className="font-bold text-base text-text mt-1">Slides &amp; Handouts</h3>
-              <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                7 lab slide decks and 2 transaction handouts ready for in-browser viewing and download.
-              </p>
+          {SQL_FAMILIES.map(f => (
+            <div key={f.tag} className="custom-card p-5">
+              <div className="flex items-baseline gap-2">
+                <span className="text-lg font-black text-primary">{f.tag}</span>
+                <span className="text-sm font-semibold text-text">{f.name}</span>
+              </div>
+              <div className="mt-2 text-xs font-mono text-text-muted leading-relaxed">{f.cmds}</div>
             </div>
-            <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
-              <span>View Slides</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
-          </div>
+          ))}
+        </div>
+      </section>
 
-          <div
-            onClick={() => onNavigate('cheatsheets')}
-            className="custom-card p-5 hover:border-primary/50 cursor-pointer transition flex flex-col justify-between"
-          >
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-c-txn">Quick Reference</span>
-              <h3 className="font-bold text-base text-text mt-1">SQL Cheat Sheets</h3>
-              <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                Compact syntax references for DDL, DML, joins, aggregation, stored programs and transactions.
-              </p>
-            </div>
-            <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
-              <span>Open Cheat Sheets</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
-          </div>
-
-          <div
-            onClick={() => onNavigate('mcq')}
-            className="custom-card p-5 hover:border-primary/50 cursor-pointer transition flex flex-col justify-between"
-          >
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-c-sql">Self-Test</span>
-              <h3 className="font-bold text-base text-text mt-1">{mcqs.length}-Question MCQ Practice</h3>
-              <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                Complete SQL Review covering DDL, DML, Aggregations, Joins, and Transactions.
-              </p>
-            </div>
-            <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
-              <span>Practice Now</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
-          </div>
-
-          <div
-            onClick={() => onNavigate('glossary')}
-            className="custom-card p-5 hover:border-primary/50 cursor-pointer transition flex flex-col justify-between"
-          >
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-c-storage">A–Z Index</span>
-              <h3 className="font-bold text-base text-text mt-1">Database Glossary</h3>
-              <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                60+ DBMS definitions, relational algebra, and PostgreSQL SQLSTATE codes with week links.
-              </p>
-            </div>
-            <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
-              <span>Open Glossary</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
-          </div>
+      {/* All pages */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-text">Explore the study portal</h2>
+        <p className="text-sm text-text-muted mt-1 mb-5">Everything on this site, one click away.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {PAGES.map(({ route, icon: Icon, label, title, text, accent }) => (
+            <button
+              key={route}
+              onClick={() => onNavigate(route)}
+              className="custom-card p-5 text-left hover:border-primary/50 cursor-pointer transition flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${accent}`}>
+                    <Icon className="w-4.5 h-4.5" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">{label}</span>
+                </div>
+                <h3 className="font-bold text-base text-text">{title}</h3>
+                <p className="text-xs text-text-muted mt-1.5 leading-relaxed">{text}</p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
+                <span>Open {label}</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+              </div>
+            </button>
+          ))}
         </div>
       </section>
     </div>
