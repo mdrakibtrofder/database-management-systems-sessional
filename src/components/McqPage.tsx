@@ -10,10 +10,17 @@ import {
   ArrowLeft,
   Award,
   Sparkles,
-  BookOpen
+  BookOpen,
+  Eye,
+  EyeOff,
+  Search,
+  ListChecks
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { mcqs, MCQ } from '../data/mcq';
+
+const SECTIONS: string[] = ['All', ...Array.from(new Set(mcqs.map(q => q.section)))];
+const TOTAL = mcqs.length;
 
 interface McqPageProps {
   onOpenInPlayground?: (sql: string) => void;
@@ -22,9 +29,9 @@ interface McqPageProps {
 export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
   // Setup state
   const [hasStarted, setHasStarted] = useState<boolean>(false);
-  const [mode, setMode] = useState<'practice' | 'exam'>('practice');
+  const [mode, setMode] = useState<'practice' | 'exam' | 'overview'>('practice');
   const [selectedSection, setSelectedSection] = useState<string>('All');
-  const [questionCount, setQuestionCount] = useState<number>(70);
+  const [questionCount, setQuestionCount] = useState<number>(TOTAL);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
 
   // Active quiz session state
@@ -36,6 +43,11 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [filterReview, setFilterReview] = useState<'all' | 'wrong'>('all');
 
+  // Quick Overview state
+  const [overviewRevealed, setOverviewRevealed] = useState<Record<number, boolean>>({});
+  const [overviewSection, setOverviewSection] = useState<string>('All');
+  const [overviewSearch, setOverviewSearch] = useState<string>('');
+
   const startQuiz = () => {
     let pool = [...mcqs];
     if (selectedSection !== 'All') {
@@ -44,7 +56,10 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
     if (isShuffled) {
       pool.sort(() => Math.random() - 0.5);
     }
-    const finalSet = pool.slice(0, Math.min(questionCount, pool.length));
+    const finalSet = mode === 'overview' ? pool : pool.slice(0, Math.min(questionCount, pool.length));
+    setOverviewRevealed({});
+    setOverviewSection('All');
+    setOverviewSearch('');
     setActiveQuestions(finalSet);
     setCurrentIndex(0);
     setUserAnswers({});
@@ -119,7 +134,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
         <div className="custom-card p-6 sm:p-8">
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-c-sql/10 text-c-sql">
-              Complete SQL Review · 70 Questions
+              Complete SQL Review · {TOTAL} Questions
             </span>
           </div>
 
@@ -127,7 +142,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
             SQL MCQ Practice &amp; Exam Review
           </h1>
           <p className="text-sm text-text-muted mt-2 leading-relaxed">
-            Test and consolidate your knowledge across all 4 key course areas: Data Definition Language (DDL), DML &amp; Querying, Aggregation &amp; Joins, and Database Transactions.
+            Test and consolidate your knowledge across all 5 key course areas: Data Definition Language (DDL), DML &amp; Querying, Aggregation &amp; Joins, Stored Programs, Views &amp; Triggers, and Database Transactions.
           </p>
 
           <div className="mt-8 space-y-6">
@@ -136,7 +151,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
               <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
                 1. Select Study Mode
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div
                   onClick={() => setMode('practice')}
                   className={`p-4 rounded-xl border cursor-pointer transition ${
@@ -170,6 +185,23 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                     Simulates a timed lab test. Answer everything, review flagged items, and see your comprehensive score breakdown upon submission.
                   </p>
                 </div>
+
+                <div
+                  onClick={() => setMode('overview')}
+                  className={`p-4 rounded-xl border cursor-pointer transition ${
+                    mode === 'overview'
+                      ? 'border-primary ring-2 ring-primary/20 bg-primary/5'
+                      : 'border-border bg-surface hover:bg-surface-2'
+                  }`}
+                >
+                  <div className="font-bold text-sm text-text flex items-center justify-between">
+                    Quick Overview (Read All)
+                    {mode === 'overview' && <CheckCircle2 className="w-4 h-4 text-primary" />}
+                  </div>
+                  <p className="text-xs text-text-muted mt-1">
+                    Lists every question with its options. Reveal the right answer per question, or show all answers at once.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -179,7 +211,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                 2. Select Syllabus Section
               </label>
               <div className="flex flex-wrap gap-2">
-                {['All', 'DDL', 'DML & DQL', 'Aggregation & Joins', 'Transactions'].map((sec) => (
+                {SECTIONS.map((sec) => (
                   <button
                     key={sec}
                     onClick={() => setSelectedSection(sec)}
@@ -189,19 +221,20 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                         : 'bg-surface-2 hover:bg-border text-text'
                     }`}
                   >
-                    {sec} {sec === 'All' ? '(70)' : ''}
+                    {sec} ({sec === 'All' ? TOTAL : mcqs.filter(q => q.section === sec).length})
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Number of questions */}
+            {mode !== 'overview' && (<>
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">
                 3. Number of Questions
               </label>
               <div className="flex flex-wrap gap-2">
-                {[10, 20, 35, 70].map((num) => (
+                {[10, 20, 40, 60, TOTAL].map((num) => (
                   <button
                     key={num}
                     onClick={() => setQuestionCount(num)}
@@ -211,7 +244,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                         : 'bg-surface-2 hover:bg-border text-text'
                     }`}
                   >
-                    {num === 70 ? '70 (All Questions)' : `${num} Questions`}
+                    {num === TOTAL ? `${TOTAL} (All Questions)` : `${num} Questions`}
                   </button>
                 ))}
               </div>
@@ -230,15 +263,172 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                 Shuffle question order
               </label>
             </div>
+            </>)}
 
             {/* Launch button */}
             <button
               onClick={startQuiz}
               className="w-full py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition shadow-sm cursor-pointer flex items-center justify-center gap-2"
             >
-              Start {mode === 'exam' ? 'Exam' : 'Practice'} Session <ArrowRight className="w-4 h-4" />
+              {mode === 'overview'
+                ? <><ListChecks className="w-4 h-4" /> Open Quick Overview</>
+                : <>Start {mode === 'exam' ? 'Exam' : 'Practice'} Session <ArrowRight className="w-4 h-4" /></>}
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Quick Overview Mode — every question with options, answers revealed on demand
+  if (mode === 'overview') {
+    const term = overviewSearch.trim().toLowerCase();
+    const shown = activeQuestions.filter(q =>
+      (overviewSection === 'All' || q.section === overviewSection) &&
+      (!term ||
+        q.q.toLowerCase().includes(term) ||
+        (q.sql || '').toLowerCase().includes(term) ||
+        q.options.some(o => o.toLowerCase().includes(term)))
+    );
+    const revealedCount = shown.filter(q => overviewRevealed[q.id]).length;
+    const allShown = shown.length > 0 && revealedCount === shown.length;
+
+    const setAll = (value: boolean) => {
+      setOverviewRevealed(prev => {
+        const next = { ...prev };
+        shown.forEach(q => { next[q.id] = value; });
+        return next;
+      });
+    };
+
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="custom-card p-5 sm:p-6 mb-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-primary">Quick Overview</span>
+              <h2 className="text-xl sm:text-2xl font-black text-text mt-1">All Questions, Options &amp; Answers</h2>
+              <p className="text-xs text-text-muted mt-1">
+                Read through every question at once. Reveal answers one by one, or all together.
+              </p>
+            </div>
+            <button
+              onClick={() => setHasStarted(false)}
+              className="px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-text hover:bg-surface-2 transition flex items-center gap-1.5 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to setup
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-2 mt-4">
+            {SECTIONS.map(sec => {
+              const count = sec === 'All' ? activeQuestions.length : activeQuestions.filter(q => q.section === sec).length;
+              if (count === 0) return null;
+              return (
+                <button
+                  key={sec}
+                  onClick={() => setOverviewSection(sec)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                    overviewSection === sec ? 'bg-primary text-white' : 'bg-surface-2 hover:bg-border text-text'
+                  }`}
+                >
+                  {sec} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sticky toolbar */}
+        <div className="sticky top-16 z-30 mb-4">
+          <div className="custom-card px-4 py-3 flex flex-wrap items-center gap-3 shadow-md">
+            <div className="relative flex-1 min-w-[180px]">
+              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <input
+                type="text"
+                value={overviewSearch}
+                onChange={(e) => setOverviewSearch(e.target.value)}
+                placeholder="Search questions, SQL or options…"
+                className="w-full pl-8 pr-3 py-2 rounded-lg bg-surface-2 border border-border text-xs text-text focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+            <span className="text-xs text-text-muted whitespace-nowrap">
+              {revealedCount}/{shown.length} answers shown
+            </span>
+            <button
+              onClick={() => setAll(!allShown)}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                allShown ? 'bg-surface-2 text-text hover:bg-border' : 'bg-primary text-white hover:bg-primary/90'
+              }`}
+            >
+              {allShown ? <><EyeOff className="w-3.5 h-3.5" /> Hide all answers</> : <><Eye className="w-3.5 h-3.5" /> Show all answers</>}
+            </button>
+          </div>
+        </div>
+
+        {shown.length === 0 && (
+          <div className="custom-card p-8 text-center text-sm text-text-muted">No questions match your search.</div>
+        )}
+
+        <div className="space-y-4">
+          {shown.map((q) => {
+            const isOpen = !!overviewRevealed[q.id];
+            return (
+              <div key={q.id} id={`ov-q-${q.id}`} className="custom-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-md font-bold bg-primary/10 text-primary">Q{q.id}</span>
+                    <span className="font-semibold text-text-muted">{q.section}</span>
+                    <span className="text-text-muted hidden sm:inline">· Week {q.weeks.join(', ')}</span>
+                  </div>
+                  <button
+                    onClick={() => setOverviewRevealed(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer ${
+                      isOpen ? 'bg-success/10 text-success hover:bg-success/20' : 'bg-surface-2 text-text hover:bg-border'
+                    }`}
+                  >
+                    {isOpen ? <><EyeOff className="w-3.5 h-3.5" /> Hide answer</> : <><Eye className="w-3.5 h-3.5" /> Show answer</>}
+                  </button>
+                </div>
+
+                <p className="font-semibold text-text text-sm mb-3 leading-snug">{q.q}</p>
+
+                {q.sql && (
+                  <pre className="p-3 rounded-lg bg-code-bg font-mono text-xs text-code-text mb-3 border border-border overflow-x-auto whitespace-pre-wrap">{q.sql}</pre>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {q.options.map((opt, oIdx) => {
+                    const correct = isOpen && oIdx === q.answer;
+                    return (
+                      <div
+                        key={oIdx}
+                        className={`p-2.5 rounded-lg border flex items-start gap-2 transition ${
+                          correct
+                            ? 'border-success bg-success/10 text-success font-bold'
+                            : isOpen
+                              ? 'border-border/60 bg-surface text-text opacity-60'
+                              : 'border-border bg-surface text-text'
+                        }`}
+                      >
+                        <span className="font-bold">{String.fromCharCode(65 + oIdx)})</span>
+                        <span className="flex-1">{opt}</span>
+                        {correct && <CheckCircle2 className="w-4 h-4 shrink-0" />}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {isOpen && (
+                  <div className="mt-3 p-3 rounded-lg bg-surface-2 text-xs text-text-muted leading-relaxed">
+                    <strong className="text-success">Answer: {String.fromCharCode(65 + q.answer)}</strong>
+                    <span className="mx-1.5">·</span>
+                    {q.explain}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -343,7 +533,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
                 <p className="font-semibold text-text text-sm mb-3">{q.q}</p>
 
                 {q.sql && (
-                  <div className="p-2.5 rounded-lg bg-code-bg font-mono text-xs text-code-text mb-3 border border-border">
+                  <div className="p-2.5 rounded-lg bg-code-bg font-mono text-xs text-code-text mb-3 border border-border whitespace-pre-wrap overflow-x-auto">
                     {q.sql}
                   </div>
                 )}
@@ -433,7 +623,7 @@ export const McqPage: React.FC<McqPageProps> = ({ onOpenInPlayground }) => {
 
         {/* SQL snippet if present */}
         {currentQ.sql && (
-          <div className="p-3.5 rounded-xl bg-code-bg font-mono text-xs sm:text-sm text-code-text mb-6 border border-border overflow-x-auto">
+          <div className="p-3.5 rounded-xl bg-code-bg font-mono text-xs sm:text-sm text-code-text mb-6 border border-border overflow-x-auto whitespace-pre-wrap">
             {currentQ.sql}
           </div>
         )}

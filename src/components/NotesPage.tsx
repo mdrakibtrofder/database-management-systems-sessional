@@ -26,8 +26,8 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onSelectWeek }) => {
       title: "PostgreSQL & SQL Basics",
       desc: "Server → Database → Schema → Table hierarchy, psql shortcuts, SELECT, DISTINCT, WHERE, ORDER BY, LIMIT, and the three safe write rules.",
       chips: ["Week 1", "psql", "SELECT", "WHERE", "ORDER BY"],
-      pdf: "/assets/slides/pdf/week-01-postgresql-sql-basics.pdf",
-      pptx: "/assets/slides/pptx/Week_1_PostgreSQL_SQL_Basics.pptx"
+      pdf: "/slides/pdf/Week_1_PostgreSQL_SQL_Basics.pdf",
+      pptx: "/slides/Week_1_PostgreSQL_SQL_Basics.pptx"
     },
     {
       id: "w2",
@@ -38,8 +38,8 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onSelectWeek }) => {
       title: "DDL: Tables, Constraints & Schemas",
       desc: "CREATE TABLE with constraints, ALTER TABLE (ADD, DROP, RENAME, TYPE USING), TRUNCATE vs DELETE vs DROP, and PostgreSQL schemas.",
       chips: ["Week 2", "CREATE TABLE", "ALTER TABLE", "search_path", "Constraints"],
-      pdf: "/assets/slides/pdf/week-02-ddl-tables-schemas-databases.pdf",
-      pptx: "/assets/slides/pptx/Week_2_DDL_Tables_Schemas_Databases.pptx"
+      pdf: "/slides/pdf/Week_2_DDL_Tables_Schemas_Databases.pdf",
+      pptx: "/slides/Week_2_DDL_Tables_Schemas_Databases.pptx"
     },
     {
       id: "w3",
@@ -50,8 +50,8 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onSelectWeek }) => {
       title: "Aggregation, Grouping & Subqueries",
       desc: "COUNT(*) vs COUNT(col), SUM, AVG with COALESCE, GROUP BY, HAVING, Scalar subqueries, NOT IN NULL trap, and NOT EXISTS.",
       chips: ["Week 3", "COUNT", "GROUP BY", "HAVING", "Subqueries"],
-      pdf: "/assets/slides/pdf/week-03-aggregation-grouping-subqueries.pdf",
-      pptx: "/assets/slides/pptx/Week_3_Aggregation_Grouping_Subqueries.pptx"
+      pdf: "/slides/pdf/Week_3_Aggregation_Grouping_Subqueries.pdf",
+      pptx: "/slides/Week_3_Aggregation_Grouping_Subqueries.pptx"
     },
     {
       id: "w4",
@@ -62,8 +62,8 @@ export const NotesPage: React.FC<NotesPageProps> = ({ onSelectWeek }) => {
       title: "SQL Joins and Set Operations",
       desc: "Inner, left, right, full outer, cross and self joins. Spotting unmatched rows with LEFT JOIN ... IS NULL. UNION, INTERSECT, and EXCEPT.",
       chips: ["Week 4", "INNER JOIN", "LEFT JOIN", "FULL JOIN", "UNION"],
-      pdf: "/assets/slides/pdf/week-04-sql-joins-and-set-operations.pdf",
-      pptx: "/assets/slides/pptx/Week_4_SQL_Joins_and_Set_Operations.pptx"
+      pdf: "/slides/pdf/Week_4_SQL_Joins_and_Set_Operations.pdf",
+      pptx: "/slides/Week_4_SQL_Joins_and_Set_Operations.pptx"
     },
     {
       id: "w7-note",

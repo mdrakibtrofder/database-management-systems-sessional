@@ -133,11 +133,8 @@ export const WeekDetailPage: React.FC<WeekDetailPageProps> = ({
       {currentWeek.decks.length > 0 && (
         <div className="mb-8">
           <SlideViewer
+            week={currentWeek.id}
             title={`${currentWeek.label}: ${currentWeek.decks[0].title}`}
-            pdfUrl={currentWeek.decks[0].pdf}
-            pptxUrl={currentWeek.decks[0].pptx}
-            slideCount={currentWeek.decks[0].slides}
-            fileSize={currentWeek.decks[0].size}
             onRunSlideSql={() => {
               if (currentWeek.snippets[0] && onOpenInPlayground) {
                 onOpenInPlayground(currentWeek.snippets[0].sql);

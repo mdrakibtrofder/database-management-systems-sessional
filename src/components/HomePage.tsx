@@ -184,7 +184,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectWeek }) 
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div
-            onClick={() => onNavigate('notes')}
+            onClick={() => onNavigate('slides')}
             className="custom-card p-5 hover:border-primary/50 cursor-pointer transition flex flex-col justify-between"
           >
             <div>
@@ -195,24 +195,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectWeek }) 
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
-              <span>View Notes</span>
+              <span>View Slides</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>
 
           <div
-            onClick={() => onNavigate('labtest')}
+            onClick={() => onNavigate('cheatsheets')}
             className="custom-card p-5 hover:border-primary/50 cursor-pointer transition flex flex-col justify-between"
           >
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-c-txn">Exam Prep</span>
-              <h3 className="font-bold text-base text-text mt-1">Lab Test Prep Matrix</h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-c-txn">Quick Reference</span>
+              <h3 className="font-bold text-base text-text mt-1">SQL Cheat Sheets</h3>
               <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                Statistical topic weighting, question matrix, and hands-on Savepoint restocking problems.
+                Compact syntax references for DDL, DML, joins, aggregation, stored programs and transactions.
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
-              <span>Open Prep Portal</span>
+              <span>Open Cheat Sheets</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>

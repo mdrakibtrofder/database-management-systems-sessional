@@ -141,8 +141,8 @@ export const course = {
       decks: [
         {
           title: "PostgreSQL & SQL Basics",
-          pdf: "/assets/slides/pdf/week-01-postgresql-sql-basics.pdf",
-          pptx: "/assets/slides/pptx/Week_1_PostgreSQL_SQL_Basics.pptx",
+          pdf: "/slides/pdf/Week_1_PostgreSQL_SQL_Basics.pdf",
+          pptx: "/slides/Week_1_PostgreSQL_SQL_Basics.pptx",
           slides: 19,
           size: "4.8 MB"
         }
@@ -282,8 +282,8 @@ export const course = {
       decks: [
         {
           title: "DDL: Tables, Schemas & Databases",
-          pdf: "/assets/slides/pdf/week-02-ddl-tables-schemas-databases.pdf",
-          pptx: "/assets/slides/pptx/Week_2_DDL_Tables_Schemas_Databases.pptx",
+          pdf: "/slides/pdf/Week_2_DDL_Tables_Schemas_Databases.pdf",
+          pptx: "/slides/Week_2_DDL_Tables_Schemas_Databases.pptx",
           slides: 18,
           size: "4.5 MB"
         }
@@ -368,8 +368,8 @@ export const course = {
       decks: [
         {
           title: "Aggregation, Grouping & Subqueries",
-          pdf: "/assets/slides/pdf/week-03-aggregation-grouping-subqueries.pdf",
-          pptx: "/assets/slides/pptx/Week_3_Aggregation_Grouping_Subqueries.pptx",
+          pdf: "/slides/pdf/Week_3_Aggregation_Grouping_Subqueries.pdf",
+          pptx: "/slides/Week_3_Aggregation_Grouping_Subqueries.pptx",
           slides: 14,
           size: "3.9 MB"
         }
@@ -480,8 +480,8 @@ export const course = {
       decks: [
         {
           title: "SQL Joins and Set Operations",
-          pdf: "/assets/slides/pdf/week-04-sql-joins-and-set-operations.pdf",
-          pptx: "/assets/slides/pptx/Week_4_SQL_Joins_and_Set_Operations.pptx",
+          pdf: "/slides/pdf/Week_4_SQL_Joins_and_Set_Operations.pdf",
+          pptx: "/slides/Week_4_SQL_Joins_and_Set_Operations.pptx",
           slides: 7,
           size: "0.3 MB"
         }
@@ -578,8 +578,8 @@ export const course = {
       decks: [
         {
           title: "Stored Procedures, Functions, Triggers & Views",
-          pdf: "/assets/slides/pdf/week-05-procedures-functions-triggers-views.pdf",
-          pptx: "/assets/slides/pptx/Week_5_Stored Procedures, Functions, Triggers, Views & Materialized Views.pptx",
+          pdf: "/slides/pdf/Week_5_Stored Procedures, Functions, Triggers, Views & Materialized Views.pdf",
+          pptx: "/slides/Week_5_Stored Procedures, Functions, Triggers, Views & Materialized Views.pptx",
           slides: 9,
           size: "2.0 MB"
         }
@@ -650,8 +650,8 @@ export const course = {
       decks: [
         {
           title: "Triggers, Backup & Restore",
-          pdf: "/assets/slides/pdf/week-06-triggers-backup-restore.pdf",
-          pptx: "/assets/slides/pptx/Week_6_PostgreSQL Triggers, Backup & Restore.pptx",
+          pdf: "/slides/pdf/Week_6_PostgreSQL Triggers, Backup & Restore.pdf",
+          pptx: "/slides/Week_6_PostgreSQL Triggers, Backup & Restore.pptx",
           slides: 6,
           size: "0.4 MB"
         }
@@ -737,8 +737,8 @@ SELECT * FROM salary_audit;`,
       decks: [
         {
           title: "Transactions, Rollback & Savepoints",
-          pdf: "/assets/slides/pdf/week-07-transactions-rollback-savepoints.pdf",
-          pptx: "/assets/slides/pptx/Week_7_Transactions_Rollback_Savepoints.pptx",
+          pdf: "/slides/pdf/Week_7_Transactions_Rollback_Savepoints.pdf",
+          pptx: "/slides/Week_7_Transactions_Rollback_Savepoints.pptx",
           slides: 12,
           size: "1.8 MB"
         }

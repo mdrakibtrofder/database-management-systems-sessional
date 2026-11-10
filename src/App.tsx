@@ -24,19 +24,25 @@ import { WeekDetailPage } from './components/WeekDetailPage';
 import { PlaygroundPage } from './components/PlaygroundPage';
 import { McqPage } from './components/McqPage';
 import { CheatsheetsPage } from './components/CheatsheetsPage';
-import { LabTestPrepPage } from './components/LabTestPrepPage';
-import { NotesPage } from './components/NotesPage';
-import { SetupPage } from './components/SetupPage';
 import { GlossaryPage } from './components/GlossaryPage';
-import { CourseInfoPage } from './components/CourseInfoPage';
+import { SlidesPage } from './components/SlidesPage';
+
+// Pages that were removed from the site — old links fall back to Home
+const REMOVED_ROUTES = ['notes', 'labtest', 'about', 'setup'];
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
     const hash = window.location.hash.replace('#/', '');
+    if (hash.startsWith('week/')) return 'week-detail';
+    if (hash.startsWith('slides')) return 'slides';
+    if (REMOVED_ROUTES.includes(hash)) return 'home';
     return hash || 'home';
   });
 
-  const [activeWeekId, setActiveWeekId] = useState<number>(1);
+  const [activeWeekId, setActiveWeekId] = useState<number>(() => {
+    const m = window.location.hash.match(/#\/(?:week|slides)\/(\d+)/);
+    return m ? parseInt(m[1], 10) : 1;
+  });
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     try {
       return localStorage.getItem('cse2206-theme') === 'dark';
@@ -61,7 +67,13 @@ export default function App() {
           return;
         }
       }
-      setCurrentRoute(hash || 'home');
+      if (hash.startsWith('slides')) {
+        const id = parseInt(hash.replace('slides/', ''), 10);
+        if (!isNaN(id)) setActiveWeekId(id);
+        setCurrentRoute('slides');
+        return;
+      }
+      setCurrentRoute(REMOVED_ROUTES.includes(hash) ? 'home' : (hash || 'home'));
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -91,6 +103,14 @@ export default function App() {
       setCurrentRoute('week-detail');
       return;
     }
+    if (route.startsWith('slides')) {
+      const id = parseInt(route.replace('slides/', ''), 10);
+      if (!isNaN(id)) setActiveWeekId(id);
+      window.location.hash = `#/${route}`;
+      setCurrentRoute('slides');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     window.location.hash = `#/${route}`;
     setCurrentRoute(route);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -117,16 +137,14 @@ export default function App() {
   }, []);
 
   // Main navigation items as shown in reference header:
-  // Roadmap | Notes | Labs | Exam Prep | Glossary | About (+ Playground & MCQ)
+  // Roadmap | Slides | Labs | MCQ | Cheat Sheets | Glossary (+ Playground)
   const navItems = [
     { id: 'weeks', label: 'Roadmap' },
-    { id: 'notes', label: 'Notes' },
+    { id: 'slides', label: 'Slides' },
     { id: 'labs', label: 'Labs' },
-    { id: 'labtest', label: 'Exam Prep' },
     { id: 'mcq', label: 'MCQ Practice' },
     { id: 'cheatsheets', label: 'Cheat Sheets' },
-    { id: 'glossary', label: 'Glossary' },
-    { id: 'about', label: 'About' }
+    { id: 'glossary', label: 'Glossary' }
   ];
 
   return (
@@ -158,13 +176,11 @@ export default function App() {
             {navItems.map((item) => {
               const isActive =
                 (item.id === 'weeks' && (currentRoute === 'weeks' || currentRoute === 'week-detail')) ||
-                (item.id === 'notes' && currentRoute === 'notes') ||
+                (item.id === 'slides' && currentRoute === 'slides') ||
                 (item.id === 'labs' && currentRoute === 'labs') ||
-                (item.id === 'labtest' && currentRoute === 'labtest') ||
                 (item.id === 'mcq' && currentRoute === 'mcq') ||
                 (item.id === 'cheatsheets' && currentRoute === 'cheatsheets') ||
-                (item.id === 'glossary' && currentRoute === 'glossary') ||
-                (item.id === 'about' && (currentRoute === 'about' || currentRoute === 'setup'));
+                (item.id === 'glossary' && currentRoute === 'glossary');
 
               return (
                 <button
@@ -258,8 +274,15 @@ export default function App() {
         {currentRoute === 'weeks' && (
           <RoadmapPage onSelectWeek={handleSelectWeek} />
         )}
-        {currentRoute === 'notes' && (
-          <NotesPage onSelectWeek={handleSelectWeek} />
+        {currentRoute === 'slides' && (
+          <SlidesPage
+            activeWeek={activeWeekId}
+            onChangeWeek={(w) => {
+              setActiveWeekId(w);
+              window.history.replaceState(null, '', `#/slides/${w}`);
+            }}
+            onSelectWeek={handleSelectWeek}
+          />
         )}
         {currentRoute === 'week-detail' && (
           <WeekDetailPage
@@ -297,17 +320,8 @@ export default function App() {
         {currentRoute === 'cheatsheets' && (
           <CheatsheetsPage onOpenInPlayground={handleOpenInPlayground} />
         )}
-        {currentRoute === 'labtest' && (
-          <LabTestPrepPage onOpenInPlayground={handleOpenInPlayground} />
-        )}
-        {currentRoute === 'setup' && (
-          <SetupPage />
-        )}
         {currentRoute === 'glossary' && (
           <GlossaryPage onSelectWeek={handleSelectWeek} onOpenInPlayground={handleOpenInPlayground} />
-        )}
-        {currentRoute === 'about' && (
-          <CourseInfoPage onSelectWeek={handleSelectWeek} />
         )}
       </main>
 

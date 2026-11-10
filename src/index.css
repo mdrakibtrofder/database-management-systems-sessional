@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* Semantic colour tokens used across components (bg-surface, border-border, text-success, bg-code-bg …).
+   They point at the CSS variables below, so light/dark theme switching keeps working. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-code-bg: var(--code-bg);
+  --color-code-text: var(--code-text);
+}
+
 @theme {
   --color-brand: #4338CA;
   --color-primary: #4F46E5;
