@@ -3,8 +3,13 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig(() => {
+// GitHub Pages serves this site from https://mdrakibtrofder.github.io/database-management-systems-sessional/
+// so production builds need that sub-path as the base. `npm run dev` keeps using '/'.
+const PAGES_BASE = '/database-management-systems-sessional/';
+
+export default defineConfig(({ command }) => {
   return {
+    base: command === 'build' ? PAGES_BASE : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

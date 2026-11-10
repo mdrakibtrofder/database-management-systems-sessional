@@ -171,7 +171,7 @@ export const WeekDetailPage: React.FC<WeekDetailPageProps> = ({
           <div className="text-xs text-text-muted flex items-center justify-between">
             <span>{currentWeek.handouts[activeHandoutTab].title}</span>
             <a
-              href={currentWeek.handouts[activeHandoutTab].pdf}
+              href={`${import.meta.env.BASE_URL}${currentWeek.handouts[activeHandoutTab].pdf.replace(/^\//, '')}`}
               download
               className="font-semibold text-primary hover:underline flex items-center gap-1"
             >
