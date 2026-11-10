@@ -1117,5 +1117,105 @@ export const mcqs: MCQ[] = [
     ],
     answer: 2,
     explain: "Atomicity requires that both operations succeed or both are rolled back, preventing money from disappearing."
+  },
+
+  // Extra DDL questions
+  {
+    id: 74,
+    section: "DDL",
+    weeks: [2],
+    dataset: null,
+    q: "Which of the following is NOT a DDL command?",
+    sql: null,
+    options: ["CREATE", "ALTER", "UPDATE", "DROP"],
+    answer: 2,
+    explain: "UPDATE modifies data inside a table, so it is a DML command. CREATE, ALTER, and DROP all change database structure."
+  },
+  {
+    id: 75,
+    section: "DDL",
+    weeks: [2],
+    dataset: null,
+    q: "What does the CHECK constraint do?",
+    sql: null,
+    options: [
+      "Ensures a column value is unique",
+      "Prevents NULL values",
+      "Enforces a condition that every row must satisfy",
+      "Links two tables together"
+    ],
+    answer: 2,
+    explain: "CHECK (age >= 18) for example rejects any INSERT or UPDATE that would leave the age below 18."
+  },
+
+  // Extra DML questions
+  {
+    id: 76,
+    section: "DML & DQL",
+    weeks: [1],
+    dataset: null,
+    q: "Which keyword removes duplicate rows from a SELECT result?",
+    sql: null,
+    options: ["UNIQUE", "DISTINCT", "DIFFERENT", "FILTER"],
+    answer: 1,
+    explain: "SELECT DISTINCT col FROM table returns only unique values for that column."
+  },
+  {
+    id: 77,
+    section: "DML & DQL",
+    weeks: [1],
+    dataset: null,
+    q: "Which operator checks if a value falls within a range (inclusive)?",
+    sql: null,
+    options: ["IN", "LIKE", "BETWEEN", "EXISTS"],
+    answer: 2,
+    explain: "WHERE salary BETWEEN 3000 AND 5000 is equivalent to WHERE salary >= 3000 AND salary <= 5000."
+  },
+
+  // Extra Aggregation & Joins question
+  {
+    id: 78,
+    section: "Aggregation & Joins",
+    weeks: [3],
+    dataset: null,
+    q: "Which aggregate function returns the total sum of a numeric column?",
+    sql: null,
+    options: ["COUNT", "MAX", "AVG", "SUM"],
+    answer: 3,
+    explain: "SUM(salary) adds up every non-NULL salary value in the group."
+  },
+
+  // Extra Transactions questions
+  {
+    id: 79,
+    section: "Transactions",
+    weeks: [7],
+    dataset: null,
+    q: "Which of the following correctly lists all four ACID properties?",
+    sql: null,
+    options: [
+      "Atomicity, Consistency, Isolation, Durability",
+      "Accuracy, Concurrency, Integrity, Distribution",
+      "Atomicity, Concurrency, Isolation, Durability",
+      "Accuracy, Consistency, Integrity, Durability"
+    ],
+    answer: 0,
+    explain: "ACID stands for Atomicity, Consistency, Isolation, and Durability — the four properties that guarantee reliable transactions."
+  },
+  {
+    id: 80,
+    section: "Transactions",
+    weeks: [7],
+    dataset: null,
+    q: "What happens if you close the connection without calling COMMIT or ROLLBACK?",
+    sql: null,
+    options: [
+      "Changes are committed automatically",
+      "Changes are saved as a draft",
+      "The transaction is rolled back and all changes are lost",
+      "The database locks until COMMIT is called"
+    ],
+    answer: 2,
+    explain: "An open transaction with no explicit COMMIT is rolled back when the session ends, ensuring no partial changes persist."
   }
 ];
